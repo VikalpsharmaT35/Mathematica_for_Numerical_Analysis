@@ -1,0 +1,4330 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[    155758,       4322]
+NotebookOptionsPosition[    141218,       4116]
+NotebookOutlinePosition[    141590,       4132]
+CellTagsIndexPosition[    141547,       4129]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{
+  3.8897560834282913`*^9, {3.8897562879840775`*^9, 3.8897562895952168`*^9}, 
+   3.889756876297581*^9, 
+   3.8897583110029616`*^9},ExpressionUUID->"57cecb78-9324-4f40-97e3-\
+65c3b5752f6d"],
+
+Cell[CellGroupData[{
+
+Cell[TextData[StyleBox["5. Iterative Methods",
+ Background->RGBColor[0.9, 1, 1]]], "Title",
+ CellChangeTimes->{{3.8904615382360535`*^9, 
+  3.8904615475173254`*^9}},ExpressionUUID->"846ab602-0ff7-4b07-815e-\
+9408d6ae23e4"],
+
+Cell["5.1Gauss Jacobi Iterative Method", "Title",
+ CellChangeTimes->{{3.889756903620102*^9, 3.889756924408001*^9}, {
+  3.8897583227987003`*^9, 3.889758323078094*^9}, {3.8897583746489706`*^9, 
+  3.8897583766276865`*^9}, {3.890461550196006*^9, 
+  3.8904615506866083`*^9}},ExpressionUUID->"86e6920a-2c08-4312-a318-\
+5a8e89d49976"],
+
+Cell[CellGroupData[{
+
+Cell["Question - 1", "Chapter",
+ CellChangeTimes->{{3.890461593638998*^9, 
+  3.890461596898839*^9}},ExpressionUUID->"60f6a03e-32b4-4bb5-a176-\
+10243d54f919"],
+
+Cell[BoxData["ClearAll"], "Input",
+ CellChangeTimes->{{3.88975694614963*^9, 3.889756957751418*^9}},
+ CellLabel->"In[1]:=",ExpressionUUID->"f09bea0d-dd99-4422-9ffb-75865423971d"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["ClearAll"], "Input",
+ CellChangeTimes->{3.889757926930356*^9},
+ CellLabel->"In[1]:=",ExpressionUUID->"9953df5f-6d9d-4af7-84d2-08a1cd6773ca"],
+
+Cell[BoxData["ClearAll"], "Output",
+ CellChangeTimes->{3.889757930238504*^9},
+ CellLabel->"Out[1]=",ExpressionUUID->"2ea758b0-9a80-479f-9695-f0f296a73b42"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"A", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"4", ",", "1", ",", "1"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "5", ",", "2"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "2", ",", "3"}], "}"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"X", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{"x1", ",", " ", "x2", ",", " ", "x3"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"x", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{"0.5", ",", " ", 
+     RowBox[{"-", "0.5"}], ",", " ", 
+     RowBox[{"-", "0.5"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"b", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{"2", ",", " ", 
+     RowBox[{"-", "6"}], ",", " ", 
+     RowBox[{"-", "4"}]}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Print", "[", 
+  "\"\<***********************************************************************\
+\>\"", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"Print", "[", 
+  "\"\< The general form of the equation is : AX = b\>\"", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"Print", "[", 
+  RowBox[{"\"\<The System of equations is : \>\"", ",", " ", 
+   RowBox[{
+    RowBox[{"MatrixForm", "[", "A", "]"}], ".", 
+    RowBox[{"MatrixForm", "[", "X", "]"}]}], ",", "\"\<=\>\"", ",", " ", 
+   RowBox[{"MatrixForm", "[", "b", "]"}]}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"l", "  ", "=", " ", 
+   RowBox[{"LowerTriangularize", "[", 
+    RowBox[{"A", ",", 
+     RowBox[{"-", "1"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"u", " ", "=", " ", 
+   RowBox[{"UpperTriangularize", "[", 
+    RowBox[{"A", ",", "1"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Print", "[", 
+   RowBox[{
+    RowBox[{"MatrixForm", "[", "l", "]"}], ",", 
+    RowBox[{"MatrixForm", "[", "u", "]"}]}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"d", " ", "=", " ", 
+  RowBox[{"DiagonalMatrix", "[", 
+   RowBox[{"{", 
+    RowBox[{"4", ",", "5", ",", "3"}], "}"}], "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"Print", "[", 
+  "\"\<***********************************************************************\
+\>\"", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"For", "[", 
+  RowBox[{
+   RowBox[{"k", " ", "=", " ", "1"}], ",", " ", 
+   RowBox[{"k", "\[LessEqual]", " ", "10"}], ",", " ", 
+   RowBox[{"k", "++"}], ",", " ", 
+   RowBox[{
+    RowBox[{"y", " ", "=", " ", 
+     RowBox[{
+      RowBox[{"Inverse", "[", "d", "]"}], ".", 
+      RowBox[{"(", 
+       RowBox[{"b", "-", 
+        RowBox[{"l", ".", "x"}], "-", 
+        RowBox[{"u", ".", "x"}]}], ")"}]}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"x", "=", 
+     RowBox[{"N", "[", "y", "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"Print", "[", 
+     RowBox[{"k", ",", "\"\<th approximation solution is : \>\"", ",", " ", 
+      RowBox[{"MatrixForm", "[", "x", "]"}]}], "]"}]}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.8897569632031946`*^9, 3.8897570198763275`*^9}, 
+   3.8897579337160873`*^9, {3.8897580473711743`*^9, 3.8897581630501127`*^9}, {
+   3.8897582560281644`*^9, 3.8897582764279194`*^9}, {3.8913360165743656`*^9, 
+   3.8913361308927417`*^9}, {3.891336214033535*^9, 3.8913362256413045`*^9}},
+ CellLabel->"In[98]:=",ExpressionUUID->"6e6c914a-ecfa-4df7-9ba2-3645d3a9cf44"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"************************************************************\
+***********\"\>"], "Print",
+ CellChangeTimes->{
+  3.8897580980726814`*^9, {3.8897581335611253`*^9, 3.8897581639534645`*^9}, {
+   3.889758267871639*^9, 3.889758276978049*^9}, {3.89133602736022*^9, 
+   3.891336131663907*^9}, {3.8913362165919957`*^9, 3.891336226261795*^9}},
+ CellLabel->
+  "During evaluation of \
+In[98]:=",ExpressionUUID->"8f24e5b9-5a46-4037-b812-6394c32eecb1"],
+
+Cell[BoxData["\<\" The general form of the equation is : AX = b\"\>"], "Print",
+ CellChangeTimes->{
+  3.8897580980726814`*^9, {3.8897581335611253`*^9, 3.8897581639534645`*^9}, {
+   3.889758267871639*^9, 3.889758276978049*^9}, {3.89133602736022*^9, 
+   3.891336131663907*^9}, {3.8913362165919957`*^9, 3.891336226265788*^9}},
+ CellLabel->
+  "During evaluation of \
+In[98]:=",ExpressionUUID->"2defd83e-fe42-4f88-a76d-327342ea6d6b"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"The System of equations is : \"\>", "\[InvisibleSpace]", 
+   RowBox[{
+    TagBox[
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"4", "1", "1"},
+        {"1", "5", "2"},
+        {"1", "2", "3"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.7]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}], "\[NoBreak]", ")"}],
+     Function[BoxForm`e$, 
+      MatrixForm[BoxForm`e$]]], ".", 
+    TagBox[
+     RowBox[{"(", "\[NoBreak]", 
+      TagBox[GridBox[{
+         {"x1"},
+         {"x2"},
+         {"x3"}
+        },
+        GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+        GridBoxSpacings->{"Columns" -> {
+            Offset[0.27999999999999997`], {
+             Offset[0.5599999999999999]}, 
+            Offset[0.27999999999999997`]}, "Rows" -> {
+            Offset[0.2], {
+             Offset[0.4]}, 
+            Offset[0.2]}}],
+       Column], "\[NoBreak]", ")"}],
+     Function[BoxForm`e$, 
+      MatrixForm[BoxForm`e$]]]}], "\[InvisibleSpace]", "\<\"=\"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"2"},
+        {
+         RowBox[{"-", "6"}]},
+        {
+         RowBox[{"-", "4"}]}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm["The System of equations is : ", 
+   Dot[
+    MatrixForm[{{4, 1, 1}, {1, 5, 2}, {1, 2, 3}}], 
+    MatrixForm[{$CellContext`x1, $CellContext`x2, $CellContext`x3}]], "=", 
+   MatrixForm[{2, -6, -4}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{
+  3.8897580980726814`*^9, {3.8897581335611253`*^9, 3.8897581639534645`*^9}, {
+   3.889758267871639*^9, 3.889758276978049*^9}, {3.89133602736022*^9, 
+   3.891336131663907*^9}, {3.8913362165919957`*^9, 3.891336226271057*^9}},
+ CellLabel->
+  "During evaluation of \
+In[98]:=",ExpressionUUID->"f4f3961c-fd7a-4a46-95c1-66a00198a9f8"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"0", "0", "0"},
+       {"1", "0", "0"},
+       {"1", "2", "0"}
+      },
+      GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]], "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"0", "1", "1"},
+       {"0", "0", "2"},
+       {"0", "0", "0"}
+      },
+      GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[
+   MatrixForm[{{0, 0, 0}, {1, 0, 0}, {1, 2, 0}}], 
+   MatrixForm[{{0, 1, 1}, {0, 0, 2}, {0, 0, 0}}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{
+  3.8897580980726814`*^9, {3.8897581335611253`*^9, 3.8897581639534645`*^9}, {
+   3.889758267871639*^9, 3.889758276978049*^9}, {3.89133602736022*^9, 
+   3.891336131663907*^9}, {3.8913362165919957`*^9, 3.8913362262791243`*^9}},
+ CellLabel->
+  "During evaluation of \
+In[98]:=",ExpressionUUID->"7fdc9133-5995-464a-b346-48a6197d718e"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"4", ",", "0", ",", "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "5", ",", "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "0", ",", "3"}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.889758163966416*^9, {3.889758267881662*^9, 3.88975827698831*^9}, {
+   3.8913360273832664`*^9, 3.8913361316849484`*^9}, {3.89133621661427*^9, 
+   3.891336226283113*^9}},
+ CellLabel->
+  "Out[108]=",ExpressionUUID->"fa4df1a1-0d5a-480e-a2fd-a8aec38d3c45"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"************************************************************\
+***********\"\>"], "Print",
+ CellChangeTimes->{
+  3.8897580980726814`*^9, {3.8897581335611253`*^9, 3.8897581639534645`*^9}, {
+   3.889758267871639*^9, 3.889758276978049*^9}, {3.89133602736022*^9, 
+   3.891336131663907*^9}, {3.8913362165919957`*^9, 3.891336226286105*^9}},
+ CellLabel->
+  "During evaluation of \
+In[98]:=",ExpressionUUID->"5c5e6e6b-18db-449e-adc9-7ace5ad1ed7e"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "1", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.75`"},
+        {
+         RowBox[{"-", "1.1`"}]},
+        {
+         RowBox[{"-", "1.1666666666666665`"}]}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[1, "th approximation solution is : ", 
+   MatrixForm[{0.75, -1.1, -1.1666666666666665`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{
+  3.8897580980726814`*^9, {3.8897581335611253`*^9, 3.8897581639534645`*^9}, {
+   3.889758267871639*^9, 3.889758276978049*^9}, {3.89133602736022*^9, 
+   3.891336131663907*^9}, {3.8913362165919957`*^9, 3.8913362262905645`*^9}},
+ CellLabel->
+  "During evaluation of \
+In[98]:=",ExpressionUUID->"2239d9a7-3f36-43c8-b3c3-4260afe2b197"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "2", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"1.0666666666666667`"},
+        {
+         RowBox[{"-", "0.8833333333333334`"}]},
+        {
+         RowBox[{"-", "0.8499999999999999`"}]}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[2, "th approximation solution is : ", 
+   MatrixForm[{
+    1.0666666666666667`, -0.8833333333333334, -0.8499999999999999}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{
+  3.8897580980726814`*^9, {3.8897581335611253`*^9, 3.8897581639534645`*^9}, {
+   3.889758267871639*^9, 3.889758276978049*^9}, {3.89133602736022*^9, 
+   3.891336131663907*^9}, {3.8913362165919957`*^9, 3.891336226297369*^9}},
+ CellLabel->
+  "During evaluation of \
+In[98]:=",ExpressionUUID->"08910199-2639-4282-8edd-7c5e0a85d07d"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "3", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.9333333333333333`"},
+        {
+         RowBox[{"-", "1.0733333333333335`"}]},
+        {
+         RowBox[{"-", "1.0999999999999999`"}]}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[3, "th approximation solution is : ", 
+   MatrixForm[{
+    0.9333333333333333, -1.0733333333333335`, -1.0999999999999999`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{
+  3.8897580980726814`*^9, {3.8897581335611253`*^9, 3.8897581639534645`*^9}, {
+   3.889758267871639*^9, 3.889758276978049*^9}, {3.89133602736022*^9, 
+   3.891336131663907*^9}, {3.8913362165919957`*^9, 3.8913362263004217`*^9}},
+ CellLabel->
+  "During evaluation of \
+In[98]:=",ExpressionUUID->"8e78336e-7ba7-44cc-9d3c-546d3ceef88a"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "4", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"1.0433333333333334`"},
+        {
+         RowBox[{"-", "0.9466666666666669`"}]},
+        {
+         RowBox[{"-", "0.9288888888888887`"}]}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[4, "th approximation solution is : ", 
+   MatrixForm[{
+    1.0433333333333334`, -0.9466666666666669, -0.9288888888888887}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{
+  3.8897580980726814`*^9, {3.8897581335611253`*^9, 3.8897581639534645`*^9}, {
+   3.889758267871639*^9, 3.889758276978049*^9}, {3.89133602736022*^9, 
+   3.891336131663907*^9}, {3.8913362165919957`*^9, 3.8913362263039412`*^9}},
+ CellLabel->
+  "During evaluation of \
+In[98]:=",ExpressionUUID->"c88874b7-4508-44e8-be67-d66d6178a01f"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "5", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.9688888888888889`"},
+        {
+         RowBox[{"-", "1.0371111111111113`"}]},
+        {
+         RowBox[{"-", "1.0499999999999998`"}]}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[5, "th approximation solution is : ", 
+   MatrixForm[{
+    0.9688888888888889, -1.0371111111111113`, -1.0499999999999998`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{
+  3.8897580980726814`*^9, {3.8897581335611253`*^9, 3.8897581639534645`*^9}, {
+   3.889758267871639*^9, 3.889758276978049*^9}, {3.89133602736022*^9, 
+   3.891336131663907*^9}, {3.8913362165919957`*^9, 3.8913362263088465`*^9}},
+ CellLabel->
+  "During evaluation of \
+In[98]:=",ExpressionUUID->"6cb3eb3d-4c28-4048-ab68-25e8c1f07fb2"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "6", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"1.021777777777778`"},
+        {
+         RowBox[{"-", "0.973777777777778`"}]},
+        {
+         RowBox[{"-", "0.9648888888888887`"}]}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[6, "th approximation solution is : ", 
+   MatrixForm[{1.021777777777778, -0.973777777777778, -0.9648888888888887}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{
+  3.8897580980726814`*^9, {3.8897581335611253`*^9, 3.8897581639534645`*^9}, {
+   3.889758267871639*^9, 3.889758276978049*^9}, {3.89133602736022*^9, 
+   3.891336131663907*^9}, {3.8913362165919957`*^9, 3.8913362263128653`*^9}},
+ CellLabel->
+  "During evaluation of \
+In[98]:=",ExpressionUUID->"d1a7239d-abde-4c45-a02e-23fdb581076b"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "7", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.9846666666666667`"},
+        {
+         RowBox[{"-", "1.0184000000000002`"}]},
+        {
+         RowBox[{"-", "1.0247407407407405`"}]}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[7, "th approximation solution is : ", 
+   MatrixForm[{
+    0.9846666666666667, -1.0184000000000002`, -1.0247407407407405`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{
+  3.8897580980726814`*^9, {3.8897581335611253`*^9, 3.8897581639534645`*^9}, {
+   3.889758267871639*^9, 3.889758276978049*^9}, {3.89133602736022*^9, 
+   3.891336131663907*^9}, {3.8913362165919957`*^9, 3.89133622631647*^9}},
+ CellLabel->
+  "During evaluation of \
+In[98]:=",ExpressionUUID->"deacb2e6-c639-47d5-9c6b-26c87395a0e6"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "8", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"1.0107851851851852`"},
+        {
+         RowBox[{"-", "0.987037037037037`"}]},
+        {
+         RowBox[{"-", "0.9826222222222221`"}]}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[8, "th approximation solution is : ", 
+   MatrixForm[{1.0107851851851852`, -0.987037037037037, -0.9826222222222221}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{
+  3.8897580980726814`*^9, {3.8897581335611253`*^9, 3.8897581639534645`*^9}, {
+   3.889758267871639*^9, 3.889758276978049*^9}, {3.89133602736022*^9, 
+   3.891336131663907*^9}, {3.8913362165919957`*^9, 3.891336226320236*^9}},
+ CellLabel->
+  "During evaluation of \
+In[98]:=",ExpressionUUID->"d0e65504-517c-4dd4-bebf-ba3ec22280de"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "9", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.9924148148148147`"},
+        {
+         RowBox[{"-", "1.009108148148148`"}]},
+        {
+         RowBox[{"-", "1.0122370370370368`"}]}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[9, "th approximation solution is : ", 
+   MatrixForm[{0.9924148148148147, -1.009108148148148, -1.0122370370370368`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{
+  3.8897580980726814`*^9, {3.8897581335611253`*^9, 3.8897581639534645`*^9}, {
+   3.889758267871639*^9, 3.889758276978049*^9}, {3.89133602736022*^9, 
+   3.891336131663907*^9}, {3.8913362165919957`*^9, 3.8913362263240957`*^9}},
+ CellLabel->
+  "During evaluation of \
+In[98]:=",ExpressionUUID->"d1aac9e8-471e-46ee-ac19-dbb4cb8fb1f3"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "10", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"1.0053362962962962`"},
+        {
+         RowBox[{"-", "0.9935881481481483`"}]},
+        {
+         RowBox[{"-", "0.9913995061728396`"}]}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[10, "th approximation solution is : ", 
+   MatrixForm[{
+    1.0053362962962962`, -0.9935881481481483, -0.9913995061728396}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{
+  3.8897580980726814`*^9, {3.8897581335611253`*^9, 3.8897581639534645`*^9}, {
+   3.889758267871639*^9, 3.889758276978049*^9}, {3.89133602736022*^9, 
+   3.891336131663907*^9}, {3.8913362165919957`*^9, 3.891336226330435*^9}},
+ CellLabel->
+  "During evaluation of \
+In[98]:=",ExpressionUUID->"f1e8b88b-11e9-4a83-a399-1ed171c74c12"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Question - 2", "Chapter",
+ CellChangeTimes->{{3.890461607425943*^9, 
+  3.890461615639856*^9}},ExpressionUUID->"c141d062-4f30-4444-b720-\
+a9e05d342d59"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"A", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"26", ",", " ", "2", ",", " ", "2"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"3", ",", " ", "27", ",", " ", "1"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"2", ",", " ", "3", ",", " ", "17"}], "}"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"X", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{"x1", ",", " ", "x2", ",", " ", "x3"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"x", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", " ", "0", ",", " ", "0"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"b", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{"12.6", ",", " ", 
+     RowBox[{"-", "14.3"}], ",", " ", "6"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Print", "[", 
+  "\"\<***********************************************************************\
+\>\"", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"Print", "[", 
+  "\"\< The general form of the equation is : AX = b\>\"", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"Print", "[", 
+  RowBox[{"\"\<The System of equations is : \>\"", ",", " ", 
+   RowBox[{
+    RowBox[{"MatrixForm", "[", "A", "]"}], ".", 
+    RowBox[{"MatrixForm", "[", "X", "]"}]}], ",", "\"\<=\>\"", ",", " ", 
+   RowBox[{"MatrixForm", "[", "b", "]"}]}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"l", "  ", "=", " ", 
+   RowBox[{"LowerTriangularize", "[", 
+    RowBox[{"A", ",", 
+     RowBox[{"-", "1"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"u", " ", "=", " ", 
+   RowBox[{"UpperTriangularize", "[", 
+    RowBox[{"A", ",", "1"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"d", " ", "=", " ", 
+  RowBox[{"DiagonalMatrix", "[", 
+   RowBox[{"{", 
+    RowBox[{"26", ",", " ", "27", ",", " ", "17"}], "}"}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"Print", "[", 
+  "\"\<***********************************************************************\
+\>\"", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"For", "[", 
+  RowBox[{
+   RowBox[{"k", " ", "=", " ", "1"}], ",", " ", 
+   RowBox[{"k", "\[LessEqual]", " ", "15"}], ",", " ", 
+   RowBox[{"k", "++"}], ",", " ", 
+   RowBox[{
+    RowBox[{"y", " ", "=", " ", 
+     RowBox[{
+      RowBox[{"Inverse", "[", "d", "]"}], ".", 
+      RowBox[{"(", 
+       RowBox[{"b", "-", 
+        RowBox[{"l", ".", "x"}], "-", 
+        RowBox[{"u", ".", "x"}]}], ")"}]}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"x", "=", 
+     RowBox[{"N", "[", "y", "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"Print", "[", 
+     RowBox[{"k", ",", "\"\<th approximation solution is : \>\"", ",", " ", 
+      RowBox[{"MatrixForm", "[", "x", "]"}]}], "]"}]}]}], 
+  "]"}], "\[IndentingNewLine]"}], "Input",
+ CellChangeTimes->{{3.8897583954465303`*^9, 3.8897584742886763`*^9}, {
+  3.8897585069428077`*^9, 3.8897585096376805`*^9}},
+ CellLabel->"In[86]:=",ExpressionUUID->"f54dd05d-19e3-4587-89dd-15b9e052ff73"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"************************************************************\
+***********\"\>"], "Print",
+ CellChangeTimes->{3.889758474603525*^9, 3.889758510305732*^9},
+ CellLabel->
+  "During evaluation of \
+In[86]:=",ExpressionUUID->"a6f286ee-0cbd-4e17-874b-63bc0594f52f"],
+
+Cell[BoxData["\<\" The general form of the equation is : AX = b\"\>"], "Print",
+ CellChangeTimes->{3.889758474603525*^9, 3.8897585103106775`*^9},
+ CellLabel->
+  "During evaluation of \
+In[86]:=",ExpressionUUID->"33806ea1-b639-45ff-8812-f32340c5ed23"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"The System of equations is : \"\>", "\[InvisibleSpace]", 
+   RowBox[{
+    TagBox[
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"26", "2", "2"},
+        {"3", "27", "1"},
+        {"2", "3", "17"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.7]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}], "\[NoBreak]", ")"}],
+     Function[BoxForm`e$, 
+      MatrixForm[BoxForm`e$]]], ".", 
+    TagBox[
+     RowBox[{"(", "\[NoBreak]", 
+      TagBox[GridBox[{
+         {"x1"},
+         {"x2"},
+         {"x3"}
+        },
+        GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+        GridBoxSpacings->{"Columns" -> {
+            Offset[0.27999999999999997`], {
+             Offset[0.5599999999999999]}, 
+            Offset[0.27999999999999997`]}, "Rows" -> {
+            Offset[0.2], {
+             Offset[0.4]}, 
+            Offset[0.2]}}],
+       Column], "\[NoBreak]", ")"}],
+     Function[BoxForm`e$, 
+      MatrixForm[BoxForm`e$]]]}], "\[InvisibleSpace]", "\<\"=\"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"12.6`"},
+        {
+         RowBox[{"-", "14.3`"}]},
+        {"6"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm["The System of equations is : ", 
+   Dot[
+    MatrixForm[{{26, 2, 2}, {3, 27, 1}, {2, 3, 17}}], 
+    MatrixForm[{$CellContext`x1, $CellContext`x2, $CellContext`x3}]], "=", 
+   MatrixForm[{12.6, -14.3, 6}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.889758474603525*^9, 3.889758510317566*^9},
+ CellLabel->
+  "During evaluation of \
+In[86]:=",ExpressionUUID->"e0598cda-c3cb-44e3-ad7e-b85c6b116018"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"26", ",", "0", ",", "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "27", ",", "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "0", ",", "17"}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.8897584746188736`*^9, 3.8897585103240376`*^9},
+ CellLabel->"Out[95]=",ExpressionUUID->"f2b6ad9a-4f0f-40bb-a522-616525c45740"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"************************************************************\
+***********\"\>"], "Print",
+ CellChangeTimes->{3.889758474603525*^9, 3.889758510330021*^9},
+ CellLabel->
+  "During evaluation of \
+In[86]:=",ExpressionUUID->"1f7c79b3-e1de-4b15-a5be-ef30950a4e90"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "1", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.4846153846153846`"},
+        {
+         RowBox[{"-", "0.5296296296296297`"}]},
+        {"0.3529411764705882`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[1, "th approximation solution is : ", 
+   MatrixForm[{0.4846153846153846, -0.5296296296296297, 0.3529411764705882}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.889758474603525*^9, 3.8897585103330555`*^9},
+ CellLabel->
+  "During evaluation of \
+In[86]:=",ExpressionUUID->"52d4553d-ad87-46ba-9e9a-3c2275b1e40d"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "2", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.498206804089157`"},
+        {
+         RowBox[{"-", "0.59654767890062`"}]},
+        {"0.38939165409753645`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[2, "th approximation solution is : ", 
+   MatrixForm[{0.498206804089157, -0.59654767890062, 0.38939165409753645`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.889758474603525*^9, 3.8897585103378644`*^9},
+ CellLabel->
+  "During evaluation of \
+In[86]:=",ExpressionUUID->"199595fe-d42a-4bdc-a3c4-3e8a43b418f4"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "3", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.5005504634463911`"},
+        {
+         RowBox[{"-", "0.599407854309815`"}]},
+        {"0.3996017310896203`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[3, "th approximation solution is : ", 
+   MatrixForm[{0.5005504634463911, -0.599407854309815, 0.3996017310896203}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.889758474603525*^9, 3.889758510342261*^9},
+ CellLabel->
+  "During evaluation of \
+In[86]:=",ExpressionUUID->"26489268-506b-45e0-a85b-48c07ed3f416"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "4", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.4999850864015534`"},
+        {
+         RowBox[{"-", "0.6000464119047701`"}]},
+        {"0.3998307432962743`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[4, "th approximation solution is : ", 
+   MatrixForm[{0.4999850864015534, -0.6000464119047701, 0.3998307432962743}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.889758474603525*^9, 3.889758510347838*^9},
+ CellLabel->
+  "During evaluation of \
+In[86]:=",ExpressionUUID->"b0112978-6552-43dd-8e01-3a137ee20c86"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "5", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.5000165898929613`"},
+        {
+         RowBox[{"-", "0.5999920741667013`"}]},
+        {"0.4000099448771296`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[5, "th approximation solution is : ", 
+   MatrixForm[{0.5000165898929613, -0.5999920741667013, 0.4000099448771296}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.889758474603525*^9, 3.889758510351686*^9},
+ CellLabel->
+  "During evaluation of \
+In[86]:=",ExpressionUUID->"4e57aaa0-bfc8-45ae-8d23-d6b6d4a99f33"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "6", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.49999862532996703`"},
+        {
+         RowBox[{"-", "0.6000022116502227`"}]},
+        {"0.39999664957142245`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[6, "th approximation solution is : ", 
+   MatrixForm[{0.49999862532996703`, -0.6000022116502227, 
+    0.39999664957142245`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.889758474603525*^9, 3.8897585103552837`*^9},
+ CellLabel->
+  "During evaluation of \
+In[86]:=",ExpressionUUID->"7e8c2e5d-038b-433a-b22e-bd1ab0909fc9"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "7", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.5000004278522154`"},
+        {
+         RowBox[{"-", "0.5999997231689379`"}]},
+        {"0.40000055201710205`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[7, "th approximation solution is : ", 
+   MatrixForm[{0.5000004278522154, -0.5999997231689379, 
+    0.40000055201710205`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.889758474603525*^9, 3.889758510359165*^9},
+ CellLabel->
+  "During evaluation of \
+In[86]:=",ExpressionUUID->"d6793d80-2afe-4c19-9d71-095003950d77"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "8", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.49999993624244893`"},
+        {
+         RowBox[{"-", "0.600000067984213`"}]},
+        {"0.39999990081190484`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[8, "th approximation solution is : ", 
+   MatrixForm[{0.49999993624244893`, -0.600000067984213, 
+    0.39999990081190484`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.889758474603525*^9, 3.889758510363264*^9},
+ CellLabel->
+  "During evaluation of \
+In[86]:=",ExpressionUUID->"731944dc-f55c-43f7-bbbd-6858950fe8f7"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "9", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.5000000128594083`"},
+        {
+         RowBox[{"-", "0.5999999892421944`"}]},
+        {"0.40000001949810243`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[9, "th approximation solution is : ", 
+   MatrixForm[{0.5000000128594083, -0.5999999892421944, 
+    0.40000001949810243`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.889758474603525*^9, 3.8897585103672624`*^9},
+ CellLabel->
+  "During evaluation of \
+In[86]:=",ExpressionUUID->"78d0515d-44c8-4ebb-b32a-acbbe857a132"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "10", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.4999999976726225`"},
+        {
+         RowBox[{"-", "0.600000002150975`"}]},
+        {"0.3999999965886921`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[10, "th approximation solution is : ", 
+   MatrixForm[{0.4999999976726225, -0.600000002150975, 0.3999999965886921}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.889758474603525*^9, 3.8897585103709497`*^9},
+ CellLabel->
+  "During evaluation of \
+In[86]:=",ExpressionUUID->"4dac651f-a48a-4d4c-976d-eca8de424444"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "11", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.500000000427868`"},
+        {
+         RowBox[{"-", "0.5999999996150578`"}]},
+        {"0.4000000006533929`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[11, "th approximation solution is : ", 
+   MatrixForm[{0.500000000427868, -0.5999999996150578, 0.4000000006533929}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.889758474603525*^9, 3.8897585103761826`*^9},
+ CellLabel->
+  "During evaluation of \
+In[86]:=",ExpressionUUID->"428e36ee-4625-43a5-99c6-1197458b9816"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "12", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.49999999992012806`"},
+        {
+         RowBox[{"-", "0.6000000000717407`"}]},
+        {"0.3999999998817316`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[12, "th approximation solution is : ", 
+   MatrixForm[{0.49999999992012806`, -0.6000000000717407, 
+    0.3999999998817316}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.889758474603525*^9, 3.889758510381359*^9},
+ CellLabel->
+  "During evaluation of \
+In[86]:=",ExpressionUUID->"ca2dae21-f943-49a6-9d03-e744a28762b7"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "13", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.5000000000146161`"},
+        {
+         RowBox[{"-", "0.599999999986745`"}]},
+        {"0.4000000000220568`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[13, "th approximation solution is : ", 
+   MatrixForm[{0.5000000000146161, -0.599999999986745, 0.4000000000220568}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.889758474603525*^9, 3.889758510384354*^9},
+ CellLabel->
+  "During evaluation of \
+In[86]:=",ExpressionUUID->"33fbab54-1bac-48c9-aa3a-493f4bef1955"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "14", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.49999999999728373`"},
+        {
+         RowBox[{"-", "0.6000000000024409`"}]},
+        {"0.3999999999959414`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[14, "th approximation solution is : ", 
+   MatrixForm[{0.49999999999728373`, -0.6000000000024409, 
+    0.3999999999959414}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.889758474603525*^9, 3.88975851038853*^9},
+ CellLabel->
+  "During evaluation of \
+In[86]:=",ExpressionUUID->"fe5678d6-428f-4a99-9190-a5b039b24b9e"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "15", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.5000000000005`"},
+        {
+         RowBox[{"-", "0.5999999999995478`"}]},
+        {"0.4000000000007503`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[15, "th approximation solution is : ", 
+   MatrixForm[{0.5000000000005, -0.5999999999995478, 0.4000000000007503}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.889758474603525*^9, 3.88975851039252*^9},
+ CellLabel->
+  "During evaluation of \
+In[86]:=",ExpressionUUID->"6902501c-c07b-49f6-8ea5-b5ef4ad45f1c"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Question - 3", "Chapter",
+ CellChangeTimes->{{3.8904616278098974`*^9, 
+  3.890461632823946*^9}},ExpressionUUID->"17bb4133-0bec-4820-bdd5-\
+be985e0d1fb8"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"A", " ", "=", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"1", ",", " ", "1", ",", " ", "1"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"1", ",", " ", "2", ",", " ", "2"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"1", ",", " ", "3", ",", " ", "1"}], "}"}]}], "}"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"X", " ", "=", " ", 
+     RowBox[{"{", 
+      RowBox[{"x1", ",", " ", "x2", ",", " ", "x3"}], "}"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"x", " ", "=", " ", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", " ", "0", ",", " ", "0"}], "}"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"b", " ", "=", " ", 
+     RowBox[{"{", 
+      RowBox[{"7", ",", " ", "13", ",", " ", "13"}], "}"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+   "Print", "[", 
+    "\"\<*********************************************************************\
+**\>\"", "]"}], "\[IndentingNewLine]", 
+   RowBox[{
+   "Print", "[", "\"\< The general form of the equation is : AX = b\>\"", 
+    "]"}], "\[IndentingNewLine]", 
+   RowBox[{"Print", "[", 
+    RowBox[{"\"\<The System of equations is : \>\"", ",", " ", 
+     RowBox[{
+      RowBox[{"MatrixForm", "[", "A", "]"}], ".", 
+      RowBox[{"MatrixForm", "[", "X", "]"}]}], ",", "\"\<=\>\"", ",", " ", 
+     RowBox[{"MatrixForm", "[", "b", "]"}]}], "]"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"l", "  ", "=", " ", 
+     RowBox[{"LowerTriangularize", "[", 
+      RowBox[{"A", ",", 
+       RowBox[{"-", "1"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"u", " ", "=", " ", 
+     RowBox[{"UpperTriangularize", "[", 
+      RowBox[{"A", ",", "1"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"d", " ", "=", " ", 
+    RowBox[{"DiagonalMatrix", "[", 
+     RowBox[{"{", 
+      RowBox[{"26", ",", " ", "27", ",", " ", "17"}], "}"}], "]"}]}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+   "Print", "[", 
+    "\"\<*********************************************************************\
+**\>\"", "]"}], "\[IndentingNewLine]", 
+   RowBox[{"For", "[", 
+    RowBox[{
+     RowBox[{"k", " ", "=", " ", "1"}], ",", " ", 
+     RowBox[{"k", "\[LessEqual]", " ", "15"}], ",", " ", 
+     RowBox[{"k", "++"}], ",", " ", 
+     RowBox[{
+      RowBox[{"y", " ", "=", " ", 
+       RowBox[{
+        RowBox[{"Inverse", "[", "d", "]"}], ".", 
+        RowBox[{"(", 
+         RowBox[{"b", "-", 
+          RowBox[{"l", ".", "x"}], "-", 
+          RowBox[{"u", ".", "x"}]}], ")"}]}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"x", "=", 
+       RowBox[{"N", "[", "y", "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"Print", "[", 
+       RowBox[{"k", ",", "\"\<th approximation solution is : \>\"", ",", " ", 
+        RowBox[{"MatrixForm", "[", "x", "]"}]}], "]"}]}]}], 
+    "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.89046164594947*^9, 3.890461646752158*^9}, {
+  3.8904616905873766`*^9, 3.890461728208071*^9}},
+ CellLabel->"In[1]:=",ExpressionUUID->"3649b546-4872-458c-9868-b663f05e150f"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"************************************************************\
+***********\"\>"], "Print",
+ CellChangeTimes->{3.890461729622447*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"cb6c7718-1d2f-4b9d-adf4-a2d33def3bb4"],
+
+Cell[BoxData["\<\" The general form of the equation is : AX = b\"\>"], "Print",
+ CellChangeTimes->{3.890461729626436*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"78cb4cfa-04c5-4922-a054-f880a8bbb7e0"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"The System of equations is : \"\>", "\[InvisibleSpace]", 
+   RowBox[{
+    TagBox[
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"1", "1", "1"},
+        {"1", "2", "2"},
+        {"1", "3", "1"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.7]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}], "\[NoBreak]", ")"}],
+     Function[BoxForm`e$, 
+      MatrixForm[BoxForm`e$]]], ".", 
+    TagBox[
+     RowBox[{"(", "\[NoBreak]", 
+      TagBox[GridBox[{
+         {"x1"},
+         {"x2"},
+         {"x3"}
+        },
+        GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+        GridBoxSpacings->{"Columns" -> {
+            Offset[0.27999999999999997`], {
+             Offset[0.5599999999999999]}, 
+            Offset[0.27999999999999997`]}, "Rows" -> {
+            Offset[0.2], {
+             Offset[0.4]}, 
+            Offset[0.2]}}],
+       Column], "\[NoBreak]", ")"}],
+     Function[BoxForm`e$, 
+      MatrixForm[BoxForm`e$]]]}], "\[InvisibleSpace]", "\<\"=\"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"7"},
+        {"13"},
+        {"13"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm["The System of equations is : ", 
+   Dot[
+    MatrixForm[{{1, 1, 1}, {1, 2, 2}, {1, 3, 1}}], 
+    MatrixForm[{$CellContext`x1, $CellContext`x2, $CellContext`x3}]], "=", 
+   MatrixForm[{7, 13, 13}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8904617299894576`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"9efa97c7-aeb0-4723-aedc-425dbd30aa02"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"26", ",", "0", ",", "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "27", ",", "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "0", ",", "17"}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.8904617299994183`*^9},
+ CellLabel->"Out[10]=",ExpressionUUID->"c65709cd-694e-4677-bc1d-79ee01825a4a"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"************************************************************\
+***********\"\>"], "Print",
+ CellChangeTimes->{3.890461730006425*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"83d52d79-9188-48a7-8f25-7040403571ac"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "1", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.2692307692307692`"},
+        {"0.48148148148148145`"},
+        {"0.7647058823529411`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[1, "th approximation solution is : ", 
+   MatrixForm[{0.2692307692307692, 0.48148148148148145`, 0.7647058823529411}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8904617301320667`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"b6ee3303-2608-43ef-83ae-28f2c445c859"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "2", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.22130048600636837`"},
+        {"0.4148650913356796`"},
+        {"0.6639014580191052`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[2, "th approximation solution is : ", 
+   MatrixForm[{0.22130048600636837`, 0.4148650913356796, 0.6639014580191052}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.890461730147643*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"f978049b-6f81-43e3-a956-3b0ceb3e8fd6"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "3", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.22773974810173905`"},
+        {"0.42410728140575626`"},
+        {"0.6784767199992113`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[3, "th approximation solution is : ", 
+   MatrixForm[{0.22773974810173905`, 0.42410728140575626`, 
+    0.6784767199992113}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8904617301576166`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"5c9e7f4c-c579-4001-9780-63cce770dd91"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "4", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.22682369225365512`"},
+        {"0.4227891411814755`"},
+        {"0.6764669651577053`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[4, "th approximation solution is : ", 
+   MatrixForm[{0.22682369225365512`, 0.4227891411814755, 0.6764669651577053}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.890461730167591*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"c17356c2-a006-4dee-858f-0dc550073247"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "5", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.22695168821772382`"},
+        {"0.4229719399048494`"},
+        {"0.6767534637765834`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[5, "th approximation solution is : ", 
+   MatrixForm[{0.22695168821772382`, 0.4229719399048494, 0.6767534637765834}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.890461730174572*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"932719db-b976-4494-ae56-d3f680524930"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "6", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.22693363831994492`"},
+        {"0.4229459771936707`"},
+        {"0.676713676003984`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[6, "th approximation solution is : ", 
+   MatrixForm[{0.22693363831994492`, 0.4229459771936707, 0.676713676003984}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8904617301865396`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"97b782a3-4bde-4c00-8be7-7ebc71d4ad15"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "7", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.22693616718470558`"},
+        {"0.422949592950818`"},
+        {"0.6767193194175908`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[7, "th approximation solution is : ", 
+   MatrixForm[{0.22693616718470558`, 0.422949592950818, 0.6767193194175908}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8904617301955156`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"b0339e10-7c39-4fff-a3f6-a505c5001519"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "8", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.2269358110627535`"},
+        {"0.4229490812585227`"},
+        {"0.6767185325860494`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[8, "th approximation solution is : ", 
+   MatrixForm[{0.2269358110627535, 0.4229490812585227, 0.6767185325860494}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8904617302034936`*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"96dcbd71-0d9c-4010-bcea-5fc87bdc4d08"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "9", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.226935861005978`"},
+        {"0.4229491527320425`"},
+        {"0.6767186438330399`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[9, "th approximation solution is : ", 
+   MatrixForm[{0.226935861005978, 0.4229491527320425, 0.6767186438330399}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.890461730213469*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"b5002da7-de8c-48db-9755-ff8b5cec8a41"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "10", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.22693585397826607`"},
+        {"0.42294914264177563`"},
+        {"0.6767186282822291`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[10, "th approximation solution is : ", 
+   MatrixForm[{0.22693585397826607`, 0.42294914264177563`, 
+    0.6767186282822291}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.890461730222443*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"1bd62814-51e5-4d27-9efb-543e098abdb8"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "11", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.22693585496446136`"},
+        {"0.4229491440539732`"},
+        {"0.6767186304762592`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[11, "th approximation solution is : ", 
+   MatrixForm[{0.22693585496446136`, 0.4229491440539732, 0.6767186304762592}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.890461730232417*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"d54fd2e9-7776-4349-bc54-23cbf67563f4"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "12", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.2269358548257603`"},
+        {"0.4229491438549266`"},
+        {"0.6767186301690364`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[12, "th approximation solution is : ", 
+   MatrixForm[{0.2269358548257603, 0.4229491438549266, 0.6767186301690364}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.890461730239398*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"acb139de-3fa2-42a6-b7d3-5a9df8ae3dac"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "13", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.22693585484523218`"},
+        {"0.42294914388282095`"},
+        {"0.6767186302123211`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[13, "th approximation solution is : ", 
+   MatrixForm[{0.22693585484523218`, 0.42294914388282095`, 
+    0.6767186302123211}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.890461730250368*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"b0b4fe7e-9cb0-4cb3-9d3c-78da142c36df"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "14", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.22693585484249457`"},
+        {"0.4229491438788935`"},
+        {"0.6767186302062532`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[14, "th approximation solution is : ", 
+   MatrixForm[{0.22693585484249457`, 0.4229491438788935, 0.6767186302062532}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.890461730258348*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"6ff72531-8777-4966-9a5d-59c066d5d3e8"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "15", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.226935854842879`"},
+        {"0.42294914387944443`"},
+        {"0.6767186302071074`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[15, "th approximation solution is : ", 
+   MatrixForm[{0.226935854842879, 0.42294914387944443`, 0.6767186302071074}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.890461730267324*^9},
+ CellLabel->
+  "During evaluation of \
+In[1]:=",ExpressionUUID->"32fa9a6e-9586-4654-818e-19e54dacd08e"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["5.2 Gauss Seidel Iterative Method", "Title",
+ CellChangeTimes->{{3.8897583401945815`*^9, 3.8897583830054417`*^9}, {
+  3.8904615565334125`*^9, 
+  3.8904615574703107`*^9}},ExpressionUUID->"1d8fe812-3451-43ff-81ee-\
+f7e2e9f00891"],
+
+Cell[CellGroupData[{
+
+Cell["Question - 1", "Chapter",
+ CellChangeTimes->{{3.890461772401657*^9, 
+  3.8904617751165013`*^9}},ExpressionUUID->"12eec11d-2f2e-421b-8eaa-\
+e12b6662f53c"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"A", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"2", ",", 
+       RowBox[{"-", "1"}], ",", "0"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"-", "1"}], ",", "2", ",", 
+       RowBox[{"-", "1"}]}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", 
+       RowBox[{"-", "1"}], ",", "2"}], "}"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"X", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{"x1", ",", " ", "x2", ",", " ", "x3"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"x", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", " ", "0", ",", " ", "0"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"b", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{"7", ",", " ", "1", ",", " ", "1"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Print", "[", 
+  "\"\<***********************************************************************\
+\>\"", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"Print", "[", 
+  "\"\< The general form of the equation is : AX = b\>\"", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"Print", "[", 
+  RowBox[{"\"\<The System of equations is : \>\"", ",", " ", 
+   RowBox[{
+    RowBox[{"MatrixForm", "[", "A", "]"}], ".", 
+    RowBox[{"MatrixForm", "[", "X", "]"}]}], ",", "\"\<=\>\"", ",", " ", 
+   RowBox[{"MatrixForm", "[", "b", "]"}]}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"l", "  ", "=", " ", 
+   RowBox[{"LowerTriangularize", "[", 
+    RowBox[{"A", ",", 
+     RowBox[{"-", "1"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"u", " ", "=", " ", 
+   RowBox[{"UpperTriangularize", "[", 
+    RowBox[{"A", ",", "1"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"d", " ", "=", " ", 
+  RowBox[{"DiagonalMatrix", "[", 
+   RowBox[{"{", 
+    RowBox[{"2", ",", " ", "2", ",", " ", "2"}], "}"}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"Print", "[", 
+  "\"\<***********************************************************************\
+\>\"", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"For", "[", 
+  RowBox[{
+   RowBox[{"k", " ", "=", " ", "1"}], ",", " ", 
+   RowBox[{"k", "\[LessEqual]", " ", "15"}], ",", " ", 
+   RowBox[{"k", "++"}], ",", " ", 
+   RowBox[{
+    RowBox[{"y", " ", "=", " ", 
+     RowBox[{
+      RowBox[{"Inverse", "[", 
+       RowBox[{"d", "+", "l"}], "]"}], ".", 
+      RowBox[{"(", 
+       RowBox[{"b", "-", 
+        RowBox[{"u", ".", "x"}]}], ")"}]}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"x", "=", 
+     RowBox[{"N", "[", "y", "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"Print", "[", 
+     RowBox[{"k", ",", "\"\<th approximation solution is : \>\"", ",", " ", 
+      RowBox[{"MatrixForm", "[", "x", "]"}]}], "]"}]}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.8897570340292425`*^9, 3.889757051024499*^9}, 
+   3.889758061021532*^9, {3.889758985779501*^9, 3.8897590887902536`*^9}, {
+   3.889759285101112*^9, 3.8897592853527308`*^9}},
+ CellLabel->
+  "In[170]:=",ExpressionUUID->"6276789f-e211-4800-9dc4-e21a241ecab4"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"************************************************************\
+***********\"\>"], "Print",
+ CellChangeTimes->{3.8897590903154683`*^9, 3.8897592859701333`*^9},
+ CellLabel->
+  "During evaluation of \
+In[170]:=",ExpressionUUID->"737146d7-5532-41a7-95d4-ad6b4cbdd42b"],
+
+Cell[BoxData["\<\" The general form of the equation is : AX = b\"\>"], "Print",
+ CellChangeTimes->{3.8897590903154683`*^9, 3.8897592859731255`*^9},
+ CellLabel->
+  "During evaluation of \
+In[170]:=",ExpressionUUID->"93f0436c-73e1-45fe-b16b-a356125c7b32"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"The System of equations is : \"\>", "\[InvisibleSpace]", 
+   RowBox[{
+    TagBox[
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"2", 
+         RowBox[{"-", "1"}], "0"},
+        {
+         RowBox[{"-", "1"}], "2", 
+         RowBox[{"-", "1"}]},
+        {"0", 
+         RowBox[{"-", "1"}], "2"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.7]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}], "\[NoBreak]", ")"}],
+     Function[BoxForm`e$, 
+      MatrixForm[BoxForm`e$]]], ".", 
+    TagBox[
+     RowBox[{"(", "\[NoBreak]", 
+      TagBox[GridBox[{
+         {"x1"},
+         {"x2"},
+         {"x3"}
+        },
+        GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+        GridBoxSpacings->{"Columns" -> {
+            Offset[0.27999999999999997`], {
+             Offset[0.5599999999999999]}, 
+            Offset[0.27999999999999997`]}, "Rows" -> {
+            Offset[0.2], {
+             Offset[0.4]}, 
+            Offset[0.2]}}],
+       Column], "\[NoBreak]", ")"}],
+     Function[BoxForm`e$, 
+      MatrixForm[BoxForm`e$]]]}], "\[InvisibleSpace]", "\<\"=\"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"7"},
+        {"1"},
+        {"1"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm["The System of equations is : ", 
+   Dot[
+    MatrixForm[{{2, -1, 0}, {-1, 2, -1}, {0, -1, 2}}], 
+    MatrixForm[{$CellContext`x1, $CellContext`x2, $CellContext`x3}]], "=", 
+   MatrixForm[{7, 1, 1}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8897590903154683`*^9, 3.8897592859802384`*^9},
+ CellLabel->
+  "During evaluation of \
+In[170]:=",ExpressionUUID->"39c0e1ac-927f-44c8-b40c-ec56af1048ec"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"2", ",", "0", ",", "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "2", ",", "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "0", ",", "2"}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.8897590903345995`*^9, 3.8897592859862328`*^9},
+ CellLabel->
+  "Out[179]=",ExpressionUUID->"0bb1164d-0909-4045-b41e-b99a69e9be18"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"************************************************************\
+***********\"\>"], "Print",
+ CellChangeTimes->{3.8897590903154683`*^9, 3.8897592859892635`*^9},
+ CellLabel->
+  "During evaluation of \
+In[170]:=",ExpressionUUID->"acc68339-82f7-4bc2-991c-1018b0856de9"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "1", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"3.5`"},
+        {"2.25`"},
+        {"1.625`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[1, "th approximation solution is : ", 
+   MatrixForm[{3.5, 2.25, 1.625}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8897590903154683`*^9, 3.88975928599372*^9},
+ CellLabel->
+  "During evaluation of \
+In[170]:=",ExpressionUUID->"02026099-f4fb-4bef-9de5-f31ea7e49448"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "2", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"4.625`"},
+        {"3.625`"},
+        {"2.3125`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[2, "th approximation solution is : ", 
+   MatrixForm[{4.625, 3.625, 2.3125}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8897590903154683`*^9, 3.8897592860004034`*^9},
+ CellLabel->
+  "During evaluation of \
+In[170]:=",ExpressionUUID->"274d1a4d-1caf-4f30-9ed9-e55e170379bf"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "3", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"5.3125`"},
+        {"4.3125`"},
+        {"2.65625`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[3, "th approximation solution is : ", 
+   MatrixForm[{5.3125, 4.3125, 2.65625}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8897590903154683`*^9, 3.889759286004803*^9},
+ CellLabel->
+  "During evaluation of \
+In[170]:=",ExpressionUUID->"00b17112-b651-45d8-ba14-51d13ef36c6e"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "4", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"5.65625`"},
+        {"4.65625`"},
+        {"2.828125`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[4, "th approximation solution is : ", 
+   MatrixForm[{5.65625, 4.65625, 2.828125}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8897590903154683`*^9, 3.889759286010733*^9},
+ CellLabel->
+  "During evaluation of \
+In[170]:=",ExpressionUUID->"e2f96625-2693-4d0b-8e4a-d48d64086610"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "5", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"5.828125`"},
+        {"4.828125`"},
+        {"2.9140625`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[5, "th approximation solution is : ", 
+   MatrixForm[{5.828125, 4.828125, 2.9140625}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8897590903154683`*^9, 3.889759286016732*^9},
+ CellLabel->
+  "During evaluation of \
+In[170]:=",ExpressionUUID->"57d7c8d0-c05c-454b-85a2-87a2cd007829"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "6", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"5.9140625`"},
+        {"4.9140625`"},
+        {"2.95703125`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[6, "th approximation solution is : ", 
+   MatrixForm[{5.9140625, 4.9140625, 2.95703125}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8897590903154683`*^9, 3.889759286020402*^9},
+ CellLabel->
+  "During evaluation of \
+In[170]:=",ExpressionUUID->"0f462cb3-515e-49a0-bc6d-c05b0fa70c3a"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "7", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"5.95703125`"},
+        {"4.95703125`"},
+        {"2.978515625`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[7, "th approximation solution is : ", 
+   MatrixForm[{5.95703125, 4.95703125, 2.978515625}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8897590903154683`*^9, 3.8897592860253887`*^9},
+ CellLabel->
+  "During evaluation of \
+In[170]:=",ExpressionUUID->"7ecb90de-45c8-4781-8503-46ce392ee817"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "8", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"5.978515625`"},
+        {"4.978515625`"},
+        {"2.9892578125`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[8, "th approximation solution is : ", 
+   MatrixForm[{5.978515625, 4.978515625, 2.9892578125}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8897590903154683`*^9, 3.8897592860303764`*^9},
+ CellLabel->
+  "During evaluation of \
+In[170]:=",ExpressionUUID->"d1ae7214-ab8e-4b80-a3c0-dc50908dc5a7"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "9", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"5.9892578125`"},
+        {"4.9892578125`"},
+        {"2.99462890625`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[9, "th approximation solution is : ", 
+   MatrixForm[{5.9892578125, 4.9892578125, 2.99462890625}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8897590903154683`*^9, 3.889759286035328*^9},
+ CellLabel->
+  "During evaluation of \
+In[170]:=",ExpressionUUID->"57d0bfd5-b8ca-465a-a881-52728f716226"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "10", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"5.99462890625`"},
+        {"4.99462890625`"},
+        {"2.997314453125`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[10, "th approximation solution is : ", 
+   MatrixForm[{5.99462890625, 4.99462890625, 2.997314453125}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8897590903154683`*^9, 3.8897592860395684`*^9},
+ CellLabel->
+  "During evaluation of \
+In[170]:=",ExpressionUUID->"914fdf19-47a5-41f9-9f03-903ca0850949"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "11", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"5.997314453125`"},
+        {"4.997314453125`"},
+        {"2.9986572265625`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[11, "th approximation solution is : ", 
+   MatrixForm[{5.997314453125, 4.997314453125, 2.9986572265625}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8897590903154683`*^9, 3.889759286042519*^9},
+ CellLabel->
+  "During evaluation of \
+In[170]:=",ExpressionUUID->"72104949-6c6f-4965-8e6a-4a78a483d1f1"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "12", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"5.9986572265625`"},
+        {"4.9986572265625`"},
+        {"2.99932861328125`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[12, "th approximation solution is : ", 
+   MatrixForm[{5.9986572265625, 4.9986572265625, 2.99932861328125}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8897590903154683`*^9, 3.8897592860468006`*^9},
+ CellLabel->
+  "During evaluation of \
+In[170]:=",ExpressionUUID->"45a2a797-785c-4987-89c0-42887aabf409"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "13", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"5.99932861328125`"},
+        {"4.99932861328125`"},
+        {"2.999664306640625`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[13, "th approximation solution is : ", 
+   MatrixForm[{5.99932861328125, 4.99932861328125, 2.999664306640625}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8897590903154683`*^9, 3.8897592860507107`*^9},
+ CellLabel->
+  "During evaluation of \
+In[170]:=",ExpressionUUID->"15dcf161-f486-4be2-91a7-e681d6a1222d"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "14", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"5.999664306640625`"},
+        {"4.999664306640625`"},
+        {"2.9998321533203125`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[14, "th approximation solution is : ", 
+   MatrixForm[{5.999664306640625, 4.999664306640625, 2.9998321533203125`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8897590903154683`*^9, 3.8897592860545444`*^9},
+ CellLabel->
+  "During evaluation of \
+In[170]:=",ExpressionUUID->"424e0ae7-a635-4bbe-b015-ed39a841bb6b"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "15", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"5.9998321533203125`"},
+        {"4.9998321533203125`"},
+        {"2.9999160766601562`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[15, "th approximation solution is : ", 
+   MatrixForm[{5.9998321533203125`, 4.9998321533203125`, 
+    2.9999160766601562`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8897590903154683`*^9, 3.8897592860578537`*^9},
+ CellLabel->
+  "During evaluation of \
+In[170]:=",ExpressionUUID->"dd5e1261-efd0-410e-ac29-86d5839e9df2"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Question 2", "Chapter",
+ CellChangeTimes->{{3.890461861590021*^9, 
+  3.8904618634873533`*^9}},ExpressionUUID->"2b76c9ce-3dc8-418f-bffe-\
+c9d7a4b764fb"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"A", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"45", ",", " ", "2", ",", " ", "3"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"-", "3"}], ",", "22", ",", "2"}], "}"}], ",", " ", 
+     RowBox[{"{", 
+      RowBox[{"5", ",", " ", "1", ",", " ", "20"}], "}"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"X", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{"x1", ",", " ", "x2", ",", " ", "x3"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"x", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", " ", "0", ",", " ", "0"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"b", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{"58", ",", " ", "47", ",", " ", "67"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Print", "[", 
+  "\"\<***********************************************************************\
+\>\"", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"Print", "[", 
+  "\"\< The general form of the equation is : AX = b\>\"", 
+  "]"}], "\[IndentingNewLine]", 
+ RowBox[{"Print", "[", 
+  RowBox[{"\"\<The System of equations is : \>\"", ",", " ", 
+   RowBox[{
+    RowBox[{"MatrixForm", "[", "A", "]"}], ".", 
+    RowBox[{"MatrixForm", "[", "X", "]"}]}], ",", "\"\<=\>\"", ",", " ", 
+   RowBox[{"MatrixForm", "[", "b", "]"}]}], "]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"l", "  ", "=", " ", 
+   RowBox[{"LowerTriangularize", "[", 
+    RowBox[{"A", ",", 
+     RowBox[{"-", "1"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"u", " ", "=", " ", 
+   RowBox[{"UpperTriangularize", "[", 
+    RowBox[{"A", ",", "1"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"d", " ", "=", " ", 
+  RowBox[{"DiagonalMatrix", "[", 
+   RowBox[{"{", 
+    RowBox[{"45", ",", " ", "22", ",", " ", "20"}], "}"}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{"Print", "[", 
+  "\"\<***********************************************************************\
+\>\"", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"For", "[", 
+  RowBox[{
+   RowBox[{"k", " ", "=", " ", "1"}], ",", " ", 
+   RowBox[{"k", "\[LessEqual]", " ", "15"}], ",", " ", 
+   RowBox[{"k", "++"}], ",", " ", 
+   RowBox[{
+    RowBox[{"y", " ", "=", " ", 
+     RowBox[{
+      RowBox[{"Inverse", "[", 
+       RowBox[{"d", "+", "l"}], "]"}], ".", 
+      RowBox[{"(", 
+       RowBox[{"b", "-", 
+        RowBox[{"u", ".", "x"}]}], ")"}]}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"x", "=", 
+     RowBox[{"N", "[", "y", "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{"Print", "[", 
+     RowBox[{"k", ",", "\"\<th approximation solution is : \>\"", ",", " ", 
+      RowBox[{"MatrixForm", "[", "x", "]"}]}], "]"}]}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.889757057503536*^9, 3.8897570665110235`*^9}, 
+   3.8897580755593147`*^9, {3.8897591135848913`*^9, 3.88975920931409*^9}, {
+   3.889759251816328*^9, 3.8897592624452906`*^9}},
+ CellLabel->
+  "In[158]:=",ExpressionUUID->"daa47c52-717b-4840-8fce-0387455471ef"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"************************************************************\
+***********\"\>"], "Print",
+ CellChangeTimes->{{3.889759180035859*^9, 3.8897592098670893`*^9}, {
+  3.889759252712983*^9, 3.8897592630661306`*^9}},
+ CellLabel->
+  "During evaluation of \
+In[158]:=",ExpressionUUID->"be3e2e41-ba8d-421a-8517-03e0e8bf518b"],
+
+Cell[BoxData["\<\" The general form of the equation is : AX = b\"\>"], "Print",
+ CellChangeTimes->{{3.889759180035859*^9, 3.8897592098670893`*^9}, {
+  3.889759252712983*^9, 3.8897592630701165`*^9}},
+ CellLabel->
+  "During evaluation of \
+In[158]:=",ExpressionUUID->"37a29665-a505-41ad-a838-d5e7eaf88ae8"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"The System of equations is : \"\>", "\[InvisibleSpace]", 
+   RowBox[{
+    TagBox[
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"45", "2", "3"},
+        {
+         RowBox[{"-", "3"}], "22", "2"},
+        {"5", "1", "20"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.7]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}], "\[NoBreak]", ")"}],
+     Function[BoxForm`e$, 
+      MatrixForm[BoxForm`e$]]], ".", 
+    TagBox[
+     RowBox[{"(", "\[NoBreak]", 
+      TagBox[GridBox[{
+         {"x1"},
+         {"x2"},
+         {"x3"}
+        },
+        GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+        GridBoxSpacings->{"Columns" -> {
+            Offset[0.27999999999999997`], {
+             Offset[0.5599999999999999]}, 
+            Offset[0.27999999999999997`]}, "Rows" -> {
+            Offset[0.2], {
+             Offset[0.4]}, 
+            Offset[0.2]}}],
+       Column], "\[NoBreak]", ")"}],
+     Function[BoxForm`e$, 
+      MatrixForm[BoxForm`e$]]]}], "\[InvisibleSpace]", "\<\"=\"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"58"},
+        {"47"},
+        {"67"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm["The System of equations is : ", 
+   Dot[
+    MatrixForm[{{45, 2, 3}, {-3, 22, 2}, {5, 1, 20}}], 
+    MatrixForm[{$CellContext`x1, $CellContext`x2, $CellContext`x3}]], "=", 
+   MatrixForm[{58, 47, 67}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.889759180035859*^9, 3.8897592098670893`*^9}, {
+  3.889759252712983*^9, 3.8897592630751057`*^9}},
+ CellLabel->
+  "During evaluation of \
+In[158]:=",ExpressionUUID->"a4ae6916-307f-4a31-9c21-d28c68a28dab"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"45", ",", "0", ",", "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "22", ",", "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "0", ",", "20"}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{{3.88975918005622*^9, 3.889759209883048*^9}, {
+  3.8897592527269473`*^9, 3.8897592630800896`*^9}},
+ CellLabel->
+  "Out[167]=",ExpressionUUID->"e05c7db6-0622-450d-8955-4474a8af7ca5"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"************************************************************\
+***********\"\>"], "Print",
+ CellChangeTimes->{{3.889759180035859*^9, 3.8897592098670893`*^9}, {
+  3.889759252712983*^9, 3.889759263085077*^9}},
+ CellLabel->
+  "During evaluation of \
+In[158]:=",ExpressionUUID->"5ae10cc6-69b8-4420-b30c-791ee0d743cb"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "1", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"1.288888888888889`"},
+        {"2.312121212121212`"},
+        {"2.912171717171717`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[1, "th approximation solution is : ", 
+   MatrixForm[{1.288888888888889, 2.312121212121212, 2.912171717171717}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.889759180035859*^9, 3.8897592098670893`*^9}, {
+  3.889759252712983*^9, 3.8897592630893793`*^9}},
+ CellLabel->
+  "During evaluation of \
+In[158]:=",ExpressionUUID->"73c86adf-32d1-415f-a85b-fd436acaab8d"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "2", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.9919831649831651`"},
+        {"2.006891184573003`"},
+        {"3.0016596495255587`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[2, "th approximation solution is : ", 
+   MatrixForm[{0.9919831649831651, 2.006891184573003, 3.0016596495255587`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.889759180035859*^9, 3.8897592098670893`*^9}, {
+  3.889759252712983*^9, 3.8897592630946455`*^9}},
+ CellLabel->
+  "During evaluation of \
+In[158]:=",ExpressionUUID->"dfc00bba-416f-4b01-aeea-7d13ceae3fb4"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "3", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.999583081828385`"},
+        {"1.9997922702924564`"},
+        {"3.0001146160282812`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[3, "th approximation solution is : ", 
+   MatrixForm[{0.999583081828385, 1.9997922702924564`, 3.0001146160282812`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.889759180035859*^9, 3.8897592098670893`*^9}, {
+  3.889759252712983*^9, 3.889759263100729*^9}},
+ CellLabel->
+  "During evaluation of \
+In[158]:=",ExpressionUUID->"5aa3b6d6-2d05-4e70-b091-1145069fc567"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "4", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"1.0000015913628943`"},
+        {"1.9999897973650964`"},
+        {"3.000000112291022`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[4, "th approximation solution is : ", 
+   MatrixForm[{1.0000015913628943`, 1.9999897973650964`, 3.000000112291022}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.889759180035859*^9, 3.8897592098670893`*^9}, {
+  3.889759252712983*^9, 3.889759263104803*^9}},
+ CellLabel->
+  "During evaluation of \
+In[158]:=",ExpressionUUID->"10711602-57e8-4877-9bea-79b1ff7fbcda"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "5", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"1.000000445964372`"},
+        {"2.0000000506050486`"},
+        {"2.9999998859786547`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[5, "th approximation solution is : ", 
+   MatrixForm[{1.000000445964372, 2.0000000506050486`, 2.9999998859786547`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.889759180035859*^9, 3.8897592098670893`*^9}, {
+  3.889759252712983*^9, 3.889759263108489*^9}},
+ CellLabel->
+  "During evaluation of \
+In[158]:=",ExpressionUUID->"6036844e-b736-4b4e-933b-ebc5b79cebfd"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "6", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"1.0000000053523097`"},
+        {"2.0000000110954375`"},
+        {"2.9999999981071506`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[6, "th approximation solution is : ", 
+   MatrixForm[{1.0000000053523097`, 2.0000000110954375`, 
+    2.9999999981071506`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.889759180035859*^9, 3.8897592098670893`*^9}, {
+  3.889759252712983*^9, 3.889759263112073*^9}},
+ CellLabel->
+  "During evaluation of \
+In[158]:=",ExpressionUUID->"69a4f4d9-8ca1-491e-bcba-f531627c77de"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "7", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.9999999996330593`"},
+        {"2.00000000012204`"},
+        {"3.0000000000856333`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[7, "th approximation solution is : ", 
+   MatrixForm[{0.9999999996330593, 2.00000000012204, 3.0000000000856333`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.889759180035859*^9, 3.8897592098670893`*^9}, {
+  3.889759252712983*^9, 3.8897592631166754`*^9}},
+ CellLabel->
+  "During evaluation of \
+In[158]:=",ExpressionUUID->"43b80809-21cf-488b-af5a-80df8551dc9b"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "8", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.9999999999888671`"},
+        {"1.9999999999906968`"},
+        {"3.0000000000032485`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[8, "th approximation solution is : ", 
+   MatrixForm[{0.9999999999888671, 1.9999999999906968`, 3.0000000000032485`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.889759180035859*^9, 3.8897592098670893`*^9}, {
+  3.889759252712983*^9, 3.889759263121361*^9}},
+ CellLabel->
+  "During evaluation of \
+In[158]:=",ExpressionUUID->"c1a0968f-750f-4e5f-a067-c4794ca9587e"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "9", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"1.000000000000197`"},
+        {"1.9999999999997318`"},
+        {"2.9999999999999645`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[9, "th approximation solution is : ", 
+   MatrixForm[{1.000000000000197, 1.9999999999997318`, 2.9999999999999645`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.889759180035859*^9, 3.8897592098670893`*^9}, {
+  3.889759252712983*^9, 3.8897592631249313`*^9}},
+ CellLabel->
+  "During evaluation of \
+In[158]:=",ExpressionUUID->"a128263e-e46c-4bb4-be6c-4bf7d3ebaa91"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "10", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"1.0000000000000142`"},
+        {"2.0000000000000053`"},
+        {"2.9999999999999964`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[10, "th approximation solution is : ", 
+   MatrixForm[{1.0000000000000142`, 2.0000000000000053`, 
+    2.9999999999999964`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.889759180035859*^9, 3.8897592098670893`*^9}, {
+  3.889759252712983*^9, 3.889759263128583*^9}},
+ CellLabel->
+  "During evaluation of \
+In[158]:=",ExpressionUUID->"16deae88-9b4b-49b5-b8dd-0679cd4f7204"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "11", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"1.`"},
+        {"2.0000000000000004`"},
+        {"3.`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[11, "th approximation solution is : ", 
+   MatrixForm[{1., 2.0000000000000004`, 3.}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.889759180035859*^9, 3.8897592098670893`*^9}, {
+  3.889759252712983*^9, 3.889759263132573*^9}},
+ CellLabel->
+  "During evaluation of \
+In[158]:=",ExpressionUUID->"be111476-8a5a-4edb-9632-163b5eb00a40"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "12", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"1.`"},
+        {"2.`"},
+        {"3.`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[12, "th approximation solution is : ", 
+   MatrixForm[{1., 2., 3.}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.889759180035859*^9, 3.8897592098670893`*^9}, {
+  3.889759252712983*^9, 3.889759263137362*^9}},
+ CellLabel->
+  "During evaluation of \
+In[158]:=",ExpressionUUID->"c31b696d-264d-49b7-8dd8-bccf2fcc2012"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "13", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"1.`"},
+        {"2.`"},
+        {"3.`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[13, "th approximation solution is : ", 
+   MatrixForm[{1., 2., 3.}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.889759180035859*^9, 3.8897592098670893`*^9}, {
+  3.889759252712983*^9, 3.8897592631400785`*^9}},
+ CellLabel->
+  "During evaluation of \
+In[158]:=",ExpressionUUID->"1eecb89e-c56a-437c-956f-0b2ca595c496"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "14", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"1.`"},
+        {"2.`"},
+        {"3.`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[14, "th approximation solution is : ", 
+   MatrixForm[{1., 2., 3.}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.889759180035859*^9, 3.8897592098670893`*^9}, {
+  3.889759252712983*^9, 3.889759263143839*^9}},
+ CellLabel->
+  "During evaluation of \
+In[158]:=",ExpressionUUID->"efaa32e0-c481-4b36-a58d-3194558902b8"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "15", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"1.`"},
+        {"2.`"},
+        {"3.`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[15, "th approximation solution is : ", 
+   MatrixForm[{1., 2., 3.}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{{3.889759180035859*^9, 3.8897592098670893`*^9}, {
+  3.889759252712983*^9, 3.8897592631477995`*^9}},
+ CellLabel->
+  "During evaluation of \
+In[158]:=",ExpressionUUID->"fbed1f95-3473-4b3e-880b-8dc83fb3d96e"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Question - 3", "Chapter",
+ CellChangeTimes->{{3.890461890882431*^9, 
+  3.8904618939534297`*^9}},ExpressionUUID->"a12391f3-2e1d-44a1-9e2d-\
+05ccc9aad2d1"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"A", " ", "=", " ", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"2", ",", " ", "1", ",", " ", "1"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"3", ",", " ", "5", ",", " ", "2"}], "}"}], ",", " ", 
+       RowBox[{"{", 
+        RowBox[{"2", ",", " ", "1", ",", " ", "4"}], "}"}]}], "}"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"X", " ", "=", " ", 
+     RowBox[{"{", 
+      RowBox[{"x1", ",", " ", "x2", ",", " ", "x3"}], "}"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"x", " ", "=", " ", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", " ", "0", ",", " ", "0"}], "}"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"b", " ", "=", " ", 
+     RowBox[{"{", 
+      RowBox[{"5", ",", " ", "15", ",", " ", "8"}], "}"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+   "Print", "[", 
+    "\"\<*********************************************************************\
+**\>\"", "]"}], "\[IndentingNewLine]", 
+   RowBox[{
+   "Print", "[", "\"\< The general form of the equation is : AX = b\>\"", 
+    "]"}], "\[IndentingNewLine]", 
+   RowBox[{"Print", "[", 
+    RowBox[{"\"\<The System of equations is : \>\"", ",", " ", 
+     RowBox[{
+      RowBox[{"MatrixForm", "[", "A", "]"}], ".", 
+      RowBox[{"MatrixForm", "[", "X", "]"}]}], ",", "\"\<=\>\"", ",", " ", 
+     RowBox[{"MatrixForm", "[", "b", "]"}]}], "]"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"l", "  ", "=", " ", 
+     RowBox[{"LowerTriangularize", "[", 
+      RowBox[{"A", ",", 
+       RowBox[{"-", "1"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"u", " ", "=", " ", 
+     RowBox[{"UpperTriangularize", "[", 
+      RowBox[{"A", ",", "1"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{"d", " ", "=", " ", 
+    RowBox[{"DiagonalMatrix", "[", 
+     RowBox[{"{", 
+      RowBox[{"2", ",", " ", "2", ",", " ", "2"}], "}"}], "]"}]}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+   "Print", "[", 
+    "\"\<*********************************************************************\
+**\>\"", "]"}], "\[IndentingNewLine]", 
+   RowBox[{"For", "[", 
+    RowBox[{
+     RowBox[{"k", " ", "=", " ", "1"}], ",", " ", 
+     RowBox[{"k", "\[LessEqual]", " ", "15"}], ",", " ", 
+     RowBox[{"k", "++"}], ",", " ", 
+     RowBox[{
+      RowBox[{"y", " ", "=", " ", 
+       RowBox[{
+        RowBox[{"Inverse", "[", 
+         RowBox[{"d", "+", "l"}], "]"}], ".", 
+        RowBox[{"(", 
+         RowBox[{"b", "-", 
+          RowBox[{"u", ".", "x"}]}], ")"}]}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"x", "=", 
+       RowBox[{"N", "[", "y", "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"Print", "[", 
+       RowBox[{"k", ",", "\"\<th approximation solution is : \>\"", ",", " ", 
+        RowBox[{"MatrixForm", "[", "x", "]"}]}], "]"}]}]}], 
+    "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.8904618957144775`*^9, 3.890461967773407*^9}},
+ CellLabel->"In[13]:=",ExpressionUUID->"30ff9781-3edd-4823-aba6-8783641c539f"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"************************************************************\
+***********\"\>"], "Print",
+ CellChangeTimes->{3.8904619693526444`*^9},
+ CellLabel->
+  "During evaluation of \
+In[13]:=",ExpressionUUID->"8da0e4a6-006c-4fbb-92c0-eb3973cdf5cf"],
+
+Cell[BoxData["\<\" The general form of the equation is : AX = b\"\>"], "Print",
+ CellChangeTimes->{3.8904619693615847`*^9},
+ CellLabel->
+  "During evaluation of \
+In[13]:=",ExpressionUUID->"00630c30-810d-4144-b876-d3d444f75dce"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"The System of equations is : \"\>", "\[InvisibleSpace]", 
+   RowBox[{
+    TagBox[
+     RowBox[{"(", "\[NoBreak]", GridBox[{
+        {"2", "1", "1"},
+        {"3", "5", "2"},
+        {"2", "1", "4"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.7]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}], "\[NoBreak]", ")"}],
+     Function[BoxForm`e$, 
+      MatrixForm[BoxForm`e$]]], ".", 
+    TagBox[
+     RowBox[{"(", "\[NoBreak]", 
+      TagBox[GridBox[{
+         {"x1"},
+         {"x2"},
+         {"x3"}
+        },
+        GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+        GridBoxSpacings->{"Columns" -> {
+            Offset[0.27999999999999997`], {
+             Offset[0.5599999999999999]}, 
+            Offset[0.27999999999999997`]}, "Rows" -> {
+            Offset[0.2], {
+             Offset[0.4]}, 
+            Offset[0.2]}}],
+       Column], "\[NoBreak]", ")"}],
+     Function[BoxForm`e$, 
+      MatrixForm[BoxForm`e$]]]}], "\[InvisibleSpace]", "\<\"=\"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"5"},
+        {"15"},
+        {"8"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm["The System of equations is : ", 
+   Dot[
+    MatrixForm[{{2, 1, 1}, {3, 5, 2}, {2, 1, 4}}], 
+    MatrixForm[{$CellContext`x1, $CellContext`x2, $CellContext`x3}]], "=", 
+   MatrixForm[{5, 15, 8}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.890461969376545*^9},
+ CellLabel->
+  "During evaluation of \
+In[13]:=",ExpressionUUID->"ded951f9-6b67-4457-b697-9dd4c49c097d"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"2", ",", "0", ",", "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "2", ",", "0"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "0", ",", "2"}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.890461969390402*^9},
+ CellLabel->"Out[22]=",ExpressionUUID->"c25e5102-1f39-4b00-ac88-db8553d6a913"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData["\<\"************************************************************\
+***********\"\>"], "Print",
+ CellChangeTimes->{3.8904619693993444`*^9},
+ CellLabel->
+  "During evaluation of \
+In[13]:=",ExpressionUUID->"53a9fd74-6046-4fdb-8f3c-565e5dc7c9e0"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "1", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"2.5`"},
+        {"3.75`"},
+        {
+         RowBox[{"-", "0.375`"}]}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[1, "th approximation solution is : ", 
+   MatrixForm[{2.5, 3.75, -0.375}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.890461969410319*^9},
+ CellLabel->
+  "During evaluation of \
+In[13]:=",ExpressionUUID->"e10e6f36-efa3-4abc-8c94-318bf4b8563d"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "2", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {"0.8125`"},
+        {"6.65625`"},
+        {
+         RowBox[{"-", "0.140625`"}]}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[2, "th approximation solution is : ", 
+   MatrixForm[{0.8125, 6.65625, -0.140625}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.890461969427303*^9},
+ CellLabel->
+  "During evaluation of \
+In[13]:=",ExpressionUUID->"f53a7900-e5cc-4883-9e2b-7a53305a5a22"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "3", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {
+         RowBox[{"-", "0.7578125`"}]},
+        {"8.77734375`"},
+        {"0.369140625`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[3, "th approximation solution is : ", 
+   MatrixForm[{-0.7578125, 8.77734375, 0.369140625}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8904619694362864`*^9},
+ CellLabel->
+  "During evaluation of \
+In[13]:=",ExpressionUUID->"721210c8-6746-4101-af60-343b6dc4da01"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "4", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {
+         RowBox[{"-", "2.0732421875`"}]},
+        {"10.24072265625`"},
+        {"0.952880859375`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[4, "th approximation solution is : ", 
+   MatrixForm[{-2.0732421875, 10.24072265625, 0.952880859375}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.89046196944754*^9},
+ CellLabel->
+  "During evaluation of \
+In[13]:=",ExpressionUUID->"778d0194-61ac-443d-a821-dee447ddd226"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "5", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {
+         RowBox[{"-", "3.0968017578125`"}]},
+        {"11.19232177734375`"},
+        {"1.500640869140625`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[5, "th approximation solution is : ", 
+   MatrixForm[{-3.0968017578125, 11.19232177734375, 1.500640869140625}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.890461969455555*^9},
+ CellLabel->
+  "During evaluation of \
+In[13]:=",ExpressionUUID->"c8a4bf9e-6756-47ae-bf73-f850e737b172"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "6", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {
+         RowBox[{"-", "3.8464813232421875`"}]},
+        {"11.769081115722656`"},
+        {"1.9619407653808594`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[6, "th approximation solution is : ", 
+   MatrixForm[{-3.8464813232421875`, 11.769081115722656`, 
+    1.9619407653808594`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.890461969462499*^9},
+ CellLabel->
+  "During evaluation of \
+In[13]:=",ExpressionUUID->"55b82511-6614-4a72-b98d-63511b819472"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "7", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {
+         RowBox[{"-", "4.365510940551758`"}]},
+        {"12.086325645446777`"},
+        {"2.322348117828369`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[7, "th approximation solution is : ", 
+   MatrixForm[{-4.365510940551758, 12.086325645446777`, 2.322348117828369}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8904619694705305`*^9},
+ CellLabel->
+  "During evaluation of \
+In[13]:=",ExpressionUUID->"4525e6ab-ecd9-4449-ba45-d8d3794b087e"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "8", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {
+         RowBox[{"-", "4.704336881637573`"}]},
+        {"12.23415720462799`"},
+        {"2.587258279323578`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[8, "th approximation solution is : ", 
+   MatrixForm[{-4.704336881637573, 12.23415720462799, 2.587258279323578}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.890461969479455*^9},
+ CellLabel->
+  "During evaluation of \
+In[13]:=",ExpressionUUID->"d7a01651-0fec-4240-abae-00b8109819e1"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "9", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {
+         RowBox[{"-", "4.910707741975784`"}]},
+        {"12.278803333640099`"},
+        {"2.771306075155735`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[9, "th approximation solution is : ", 
+   MatrixForm[{-4.910707741975784, 12.278803333640099`, 2.771306075155735}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8904619694884043`*^9},
+ CellLabel->
+  "During evaluation of \
+In[13]:=",ExpressionUUID->"ad075ff3-cd14-499d-a6bb-18b84f1320ea"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "10", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {
+         RowBox[{"-", "5.025054704397917`"}]},
+        {"12.26627598144114`"},
+        {"2.8919167136773467`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[10, "th approximation solution is : ", 
+   MatrixForm[{-5.025054704397917, 12.26627598144114, 2.8919167136773467`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8904619694974184`*^9},
+ CellLabel->
+  "During evaluation of \
+In[13]:=",ExpressionUUID->"9b8fa1bd-06ab-4bb0-93ce-1a77d9c880d9"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "11", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {
+         RowBox[{"-", "5.079096347559243`"}]},
+        {"12.226727807661518`"},
+        {"2.965732443728484`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[11, "th approximation solution is : ", 
+   MatrixForm[{-5.079096347559243, 12.226727807661518`, 2.965732443728484}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.89046196950636*^9},
+ CellLabel->
+  "During evaluation of \
+In[13]:=",ExpressionUUID->"ad81320d-8fca-413b-acdb-db8e61dc938b"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "12", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {
+         RowBox[{"-", "5.096230125695001`"}]},
+        {"12.178612744814018`"},
+        {"3.0069237532879924`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[12, "th approximation solution is : ", 
+   MatrixForm[{-5.096230125695001, 12.178612744814018`, 3.0069237532879924`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8904619695143375`*^9},
+ CellLabel->
+  "During evaluation of \
+In[13]:=",ExpressionUUID->"d5f317f6-65ac-45ab-9360-f65d7a522b8d"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "13", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {
+         RowBox[{"-", "5.092768249051005`"}]},
+        {"12.132228620288515`"},
+        {"3.0266539389067475`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[13, "th approximation solution is : ", 
+   MatrixForm[{-5.092768249051005, 12.132228620288515`, 3.0266539389067475`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.890461969522315*^9},
+ CellLabel->
+  "During evaluation of \
+In[13]:=",ExpressionUUID->"49030fae-92f0-46f8-8823-53b488749a9e"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "14", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {
+         RowBox[{"-", "5.079441279597631`"}]},
+        {"12.0925079804897`"},
+        {"3.0331872893527816`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[14, "th approximation solution is : ", 
+   MatrixForm[{-5.079441279597631, 12.0925079804897, 3.0331872893527816`}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.8904619695283337`*^9},
+ CellLabel->
+  "During evaluation of \
+In[13]:=",ExpressionUUID->"6e9b6f3e-f755-4128-954d-60f037190a50"],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{
+  "15", "\[InvisibleSpace]", "\<\"th approximation solution is : \"\>", 
+   "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", 
+     TagBox[GridBox[{
+        {
+         RowBox[{"-", "5.062847634921241`"}]},
+        {"12.06108416302908`"},
+        {"3.032305553406701`"}
+       },
+       GridBoxAlignment->{"Columns" -> {{Center}}, "Rows" -> {{Baseline}}},
+       GridBoxSpacings->{"Columns" -> {
+           Offset[0.27999999999999997`], {
+            Offset[0.5599999999999999]}, 
+           Offset[0.27999999999999997`]}, "Rows" -> {
+           Offset[0.2], {
+            Offset[0.4]}, 
+           Offset[0.2]}}],
+      Column], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm[15, "th approximation solution is : ", 
+   MatrixForm[{-5.062847634921241, 12.06108416302908, 3.032305553406701}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.89046196953629*^9},
+ CellLabel->
+  "During evaluation of \
+In[13]:=",ExpressionUUID->"c4d7f556-5a7e-4cb2-9fb9-78e9e3fde8cf"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.889757069440502*^9, 3.8897570908368907`*^9}, 
+   3.889758137200416*^9},
+ CellLabel->"In[31]:=",ExpressionUUID->"f3c48b32-7ab3-48a4-8978-242377b5b5c2"],
+
+Cell[BoxData["\[IndentingNewLine]"], "Input",
+ CellChangeTimes->{{3.8897571004967484`*^9, 3.889757182675049*^9}, 
+   3.889758153303279*^9},
+ CellLabel->"In[38]:=",ExpressionUUID->"e7aa7e7e-7638-4bc6-98dd-44b7c220e101"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.8897571913800573`*^9, 3.8897571930585623`*^9}, {
+  3.8897572391170344`*^9, 3.8897573118367343`*^9}, {3.889757912850335*^9, 
+  3.8897579141009893`*^9}, {3.8897582899666505`*^9, 3.8897582917206163`*^9}},
+ CellLabel->"In[72]:=",ExpressionUUID->"f6f655d0-da7f-4d87-93fb-c4f9ac9f469a"],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.8897573201398983`*^9, 3.8897573253044443`*^9}, {
+   3.8897573697161407`*^9, 3.889757491400133*^9}, {3.8897577005627985`*^9, 
+   3.8897577065963883`*^9}, {3.889757740486678*^9, 3.889757742244359*^9}, {
+   3.889757871836978*^9, 3.8897578721281996`*^9}, 3.889758297470759*^9},
+ CellLabel->"In[73]:=",ExpressionUUID->"bad67210-8932-4755-bd05-0b2a9f6c02f9"]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{1520, 781},
+WindowMargins->{{-8, Automatic}, {Automatic, 0}},
+Magnification:>1.3 Inherited,
+FrontEndVersion->"12.0 for Microsoft Windows (64-bit) (April 8, 2019)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 234, 5, 37, "Input",ExpressionUUID->"57cecb78-9324-4f40-97e3-65c3b5752f6d"],
+Cell[CellGroupData[{
+Cell[817, 29, 221, 4, 126, "Title",ExpressionUUID->"846ab602-0ff7-4b07-815e-9408d6ae23e4"],
+Cell[1041, 35, 327, 5, 126, "Title",ExpressionUUID->"86e6920a-2c08-4312-a318-5a8e89d49976"],
+Cell[CellGroupData[{
+Cell[1393, 44, 157, 3, 88, "Chapter",ExpressionUUID->"60f6a03e-32b4-4bb5-a176-10243d54f919"],
+Cell[1553, 49, 177, 2, 37, "Input",ExpressionUUID->"f09bea0d-dd99-4422-9ffb-75865423971d"],
+Cell[CellGroupData[{
+Cell[1755, 55, 154, 2, 37, "Input",ExpressionUUID->"9953df5f-6d9d-4af7-84d2-08a1cd6773ca"],
+Cell[1912, 59, 155, 2, 43, "Output",ExpressionUUID->"2ea758b0-9a80-479f-9695-f0f296a73b42"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[2104, 66, 3341, 85, 388, "Input",ExpressionUUID->"6e6c914a-ecfa-4df7-9ba2-3645d3a9cf44"],
+Cell[CellGroupData[{
+Cell[5470, 155, 456, 8, 29, "Print",ExpressionUUID->"8f24e5b9-5a46-4037-b812-6394c32eecb1"],
+Cell[5929, 165, 428, 7, 29, "Print",ExpressionUUID->"2defd83e-fe42-4f88-a76d-327342ea6d6b"],
+Cell[6360, 174, 2484, 71, 66, "Print",ExpressionUUID->"f4f3961c-fd7a-4a46-95c1-66a00198a9f8"],
+Cell[8847, 247, 1611, 45, 66, "Print",ExpressionUUID->"7fdc9133-5995-464a-b346-48a6197d718e"]
+}, Open  ]],
+Cell[10473, 295, 536, 14, 43, "Output",ExpressionUUID->"fa4df1a1-0d5a-480e-a2fd-a8aec38d3c45"],
+Cell[CellGroupData[{
+Cell[11034, 313, 456, 8, 29, "Print",ExpressionUUID->"5c5e6e6b-18db-449e-adc9-7ace5ad1ed7e"],
+Cell[11493, 323, 1252, 34, 66, "Print",ExpressionUUID->"2239d9a7-3f36-43c8-b3c3-4260afe2b197"],
+Cell[12748, 359, 1313, 35, 66, "Print",ExpressionUUID->"08910199-2639-4282-8edd-7c5e0a85d07d"],
+Cell[14064, 396, 1316, 35, 66, "Print",ExpressionUUID->"8e78336e-7ba7-44cc-9d3c-546d3ceef88a"],
+Cell[15383, 433, 1315, 35, 66, "Print",ExpressionUUID->"c88874b7-4508-44e8-be67-d66d6178a01f"],
+Cell[16701, 470, 1316, 35, 66, "Print",ExpressionUUID->"6cb3eb3d-4c28-4048-ab68-25e8c1f07fb2"],
+Cell[18020, 507, 1305, 34, 66, "Print",ExpressionUUID->"d1a7239d-abde-4c45-a02e-23fdb581076b"],
+Cell[19328, 543, 1313, 35, 66, "Print",ExpressionUUID->"deacb2e6-c639-47d5-9c6b-26c87395a0e6"],
+Cell[20644, 580, 1306, 34, 66, "Print",ExpressionUUID->"d0e65504-517c-4dd4-bebf-ba3ec22280de"],
+Cell[21953, 616, 1308, 34, 66, "Print",ExpressionUUID->"d1aac9e8-471e-46ee-ac19-dbb4cb8fb1f3"],
+Cell[23264, 652, 1315, 35, 66, "Print",ExpressionUUID->"f1e8b88b-11e9-4a83-a399-1ed171c74c12"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[24640, 694, 157, 3, 88, "Chapter",ExpressionUUID->"c141d062-4f30-4444-b720-a9e05d342d59"],
+Cell[CellGroupData[{
+Cell[24822, 701, 2997, 78, 388, "Input",ExpressionUUID->"f54dd05d-19e3-4587-89dd-15b9e052ff73"],
+Cell[CellGroupData[{
+Cell[27844, 783, 276, 5, 29, "Print",ExpressionUUID->"a6f286ee-0cbd-4e17-874b-63bc0594f52f"],
+Cell[28123, 790, 250, 4, 29, "Print",ExpressionUUID->"33806ea1-b639-45ff-8812-f32340c5ed23"],
+Cell[28376, 796, 2298, 67, 66, "Print",ExpressionUUID->"e0598cda-c3cb-44e3-ad7e-b85c6b116018"]
+}, Open  ]],
+Cell[30689, 866, 410, 10, 43, "Output",ExpressionUUID->"f2b6ad9a-4f0f-40bb-a522-616525c45740"],
+Cell[CellGroupData[{
+Cell[31124, 880, 276, 5, 29, "Print",ExpressionUUID->"1f7c79b3-e1de-4b15-a5be-ef30950a4e90"],
+Cell[31403, 887, 1103, 30, 66, "Print",ExpressionUUID->"52d4553d-ad87-46ba-9e9a-3c2275b1e40d"],
+Cell[32509, 919, 1100, 30, 66, "Print",ExpressionUUID->"199595fe-d42a-4bdc-a3c4-3e8a43b418f4"],
+Cell[33612, 951, 1099, 30, 66, "Print",ExpressionUUID->"26489268-506b-45e0-a85b-48c07ed3f416"],
+Cell[34714, 983, 1101, 30, 66, "Print",ExpressionUUID->"b0112978-6552-43dd-8e01-3a137ee20c86"],
+Cell[35818, 1015, 1101, 30, 66, "Print",ExpressionUUID->"4e57aaa0-bfc8-45ae-8d23-d6b6d4a99f33"],
+Cell[36922, 1047, 1114, 31, 66, "Print",ExpressionUUID->"7e8c2e5d-038b-433a-b22e-bd1ab0909fc9"],
+Cell[38039, 1080, 1109, 31, 66, "Print",ExpressionUUID->"d6793d80-2afe-4c19-9d71-095003950d77"],
+Cell[39151, 1113, 1110, 31, 66, "Print",ExpressionUUID->"731944dc-f55c-43f7-bbbd-6858950fe8f7"],
+Cell[40264, 1146, 1111, 31, 66, "Print",ExpressionUUID->"78d0515d-44c8-4ebb-b32a-acbbe857a132"],
+Cell[41378, 1179, 1103, 30, 66, "Print",ExpressionUUID->"4dac651f-a48a-4d4c-976d-eca8de424444"],
+Cell[42484, 1211, 1103, 30, 66, "Print",ExpressionUUID->"428e36ee-4625-43a5-99c6-1197458b9816"],
+Cell[43590, 1243, 1111, 31, 66, "Print",ExpressionUUID->"ca2dae21-f943-49a6-9d03-e744a28762b7"],
+Cell[44704, 1276, 1101, 30, 66, "Print",ExpressionUUID->"33fbab54-1bac-48c9-aa3a-493f4bef1955"],
+Cell[45808, 1308, 1110, 31, 66, "Print",ExpressionUUID->"fe5678d6-428f-4a99-9190-a5b039b24b9e"],
+Cell[46921, 1341, 1096, 30, 66, "Print",ExpressionUUID->"6902501c-c07b-49f6-8ea5-b5ef4ad45f1c"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[48078, 1378, 159, 3, 88, "Chapter",ExpressionUUID->"17bb4133-0bec-4820-bdd5-be985e0d1fb8"],
+Cell[CellGroupData[{
+Cell[48262, 1385, 3129, 81, 388, "Input",ExpressionUUID->"3649b546-4872-458c-9868-b663f05e150f"],
+Cell[CellGroupData[{
+Cell[51416, 1470, 253, 5, 29, "Print",ExpressionUUID->"cb6c7718-1d2f-4b9d-adf4-a2d33def3bb4"],
+Cell[51672, 1477, 225, 4, 29, "Print",ExpressionUUID->"78cb4cfa-04c5-4922-a054-f880a8bbb7e0"],
+Cell[51900, 1483, 2235, 66, 66, "Print",ExpressionUUID->"9efa97c7-aeb0-4723-aedc-425dbd30aa02"]
+}, Open  ]],
+Cell[54150, 1552, 386, 10, 43, "Output",ExpressionUUID->"c65709cd-694e-4677-bc1d-79ee01825a4a"],
+Cell[CellGroupData[{
+Cell[54561, 1566, 253, 5, 29, "Print",ExpressionUUID->"83d52d79-9188-48a7-8f25-7040403571ac"],
+Cell[54817, 1573, 1057, 29, 66, "Print",ExpressionUUID->"b6ee3303-2608-43ef-83ae-28f2c445c859"],
+Cell[55877, 1604, 1055, 29, 66, "Print",ExpressionUUID->"f978049b-6f81-43e3-a956-3b0ceb3e8fd6"],
+Cell[56935, 1635, 1065, 30, 66, "Print",ExpressionUUID->"5c9e7f4c-c579-4001-9780-63cce770dd91"],
+Cell[58003, 1667, 1055, 29, 66, "Print",ExpressionUUID->"c17356c2-a006-4dee-858f-0dc550073247"],
+Cell[59061, 1698, 1055, 29, 66, "Print",ExpressionUUID->"932719db-b976-4494-ae56-d3f680524930"],
+Cell[60119, 1729, 1055, 29, 66, "Print",ExpressionUUID->"97b782a3-4bde-4c00-8be7-7ebc71d4ad15"],
+Cell[61177, 1760, 1055, 29, 66, "Print",ExpressionUUID->"b0339e10-7c39-4fff-a3f6-a505c5001519"],
+Cell[62235, 1791, 1054, 29, 66, "Print",ExpressionUUID->"96dcbd71-0d9c-4010-bcea-5fc87bdc4d08"],
+Cell[63292, 1822, 1050, 29, 66, "Print",ExpressionUUID->"b5002da7-de8c-48db-9755-ff8b5cec8a41"],
+Cell[64345, 1853, 1065, 30, 66, "Print",ExpressionUUID->"1bd62814-51e5-4d27-9efb-543e098abdb8"],
+Cell[65413, 1885, 1057, 29, 66, "Print",ExpressionUUID->"d54fd2e9-7776-4349-bc54-23cbf67563f4"],
+Cell[66473, 1916, 1054, 29, 66, "Print",ExpressionUUID->"acb139de-3fa2-42a6-b7d3-5a9df8ae3dac"],
+Cell[67530, 1947, 1065, 30, 66, "Print",ExpressionUUID->"b0b4fe7e-9cb0-4cb3-9d3c-78da142c36df"],
+Cell[68598, 1979, 1057, 29, 66, "Print",ExpressionUUID->"6ff72531-8777-4966-9a5d-59c066d5d3e8"],
+Cell[69658, 2010, 1055, 29, 66, "Print",ExpressionUUID->"32fa9a6e-9586-4654-818e-19e54dacd08e"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[70786, 2047, 233, 4, 126, "Title",ExpressionUUID->"1d8fe812-3451-43ff-81ee-f7e2e9f00891"],
+Cell[CellGroupData[{
+Cell[71044, 2055, 159, 3, 88, "Chapter",ExpressionUUID->"12eec11d-2f2e-421b-8eaa-e12b6662f53c"],
+Cell[CellGroupData[{
+Cell[71228, 2062, 3064, 82, 363, "Input",ExpressionUUID->"6276789f-e211-4800-9dc4-e21a241ecab4"],
+Cell[CellGroupData[{
+Cell[74317, 2148, 281, 5, 29, "Print",ExpressionUUID->"737146d7-5532-41a7-95d4-ad6b4cbdd42b"],
+Cell[74601, 2155, 253, 4, 29, "Print",ExpressionUUID->"93f0436c-73e1-45fe-b16b-a356125c7b32"],
+Cell[74857, 2161, 2361, 70, 66, "Print",ExpressionUUID->"39c0e1ac-927f-44c8-b40c-ec56af1048ec"]
+}, Open  ]],
+Cell[77233, 2234, 411, 11, 43, "Output",ExpressionUUID->"0bb1164d-0909-4045-b41e-b99a69e9be18"],
+Cell[CellGroupData[{
+Cell[77669, 2249, 281, 5, 29, "Print",ExpressionUUID->"acc68339-82f7-4bc2-991c-1018b0856de9"],
+Cell[77953, 2256, 993, 29, 66, "Print",ExpressionUUID->"02026099-f4fb-4bef-9de5-f31ea7e49448"],
+Cell[78949, 2287, 1004, 29, 66, "Print",ExpressionUUID->"274d1a4d-1caf-4f30-9ed9-e55e170379bf"],
+Cell[79956, 2318, 1008, 29, 66, "Print",ExpressionUUID->"00b17112-b651-45d8-ba14-51d13ef36c6e"],
+Cell[80967, 2349, 1014, 29, 66, "Print",ExpressionUUID->"e2f96625-2693-4d0b-8e4a-d48d64086610"],
+Cell[81984, 2380, 1020, 29, 66, "Print",ExpressionUUID->"57d7c8d0-c05c-454b-85a2-87a2cd007829"],
+Cell[83007, 2411, 1026, 29, 66, "Print",ExpressionUUID->"0f462cb3-515e-49a0-bc6d-c05b0fa70c3a"],
+Cell[84036, 2442, 1034, 29, 66, "Print",ExpressionUUID->"7ecb90de-45c8-4781-8503-46ce392ee817"],
+Cell[85073, 2473, 1040, 29, 66, "Print",ExpressionUUID->"d1ae7214-ab8e-4b80-a3c0-dc50908dc5a7"],
+Cell[86116, 2504, 1044, 29, 66, "Print",ExpressionUUID->"57d0bfd5-b8ca-465a-a881-52728f716226"],
+Cell[87163, 2535, 1054, 29, 66, "Print",ExpressionUUID->"914fdf19-47a5-41f9-9f03-903ca0850949"],
+Cell[88220, 2566, 1058, 29, 66, "Print",ExpressionUUID->"72104949-6c6f-4965-8e6a-4a78a483d1f1"],
+Cell[89281, 2597, 1066, 29, 66, "Print",ExpressionUUID->"45a2a797-785c-4987-89c0-42887aabf409"],
+Cell[90350, 2628, 1072, 29, 66, "Print",ExpressionUUID->"15dcf161-f486-4be2-91a7-e681d6a1222d"],
+Cell[91425, 2659, 1079, 29, 66, "Print",ExpressionUUID->"424e0ae7-a635-4bbe-b015-ed39a841bb6b"],
+Cell[92507, 2690, 1090, 30, 66, "Print",ExpressionUUID->"dd5e1261-efd0-410e-ac29-86d5839e9df2"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[93658, 2727, 157, 3, 88, "Chapter",ExpressionUUID->"2b76c9ce-3dc8-418f-bffe-c9d7a4b764fb"],
+Cell[CellGroupData[{
+Cell[93840, 2734, 3025, 79, 363, "Input",ExpressionUUID->"daa47c52-717b-4840-8fce-0387455471ef"],
+Cell[CellGroupData[{
+Cell[96890, 2817, 332, 6, 29, "Print",ExpressionUUID->"be3e2e41-ba8d-421a-8517-03e0e8bf518b"],
+Cell[97225, 2825, 304, 5, 29, "Print",ExpressionUUID->"37a29665-a505-41ad-a838-d5e7eaf88ae8"],
+Cell[97532, 2832, 2346, 68, 66, "Print",ExpressionUUID->"a4ae6916-307f-4a31-9c21-d28c68a28dab"]
+}, Open  ]],
+Cell[99893, 2903, 464, 12, 43, "Output",ExpressionUUID->"e05c7db6-0622-450d-8955-4474a8af7ca5"],
+Cell[CellGroupData[{
+Cell[100382, 2919, 330, 6, 29, "Print",ExpressionUUID->"5ae10cc6-69b8-4420-b30c-791ee0d743cb"],
+Cell[100715, 2927, 1125, 30, 66, "Print",ExpressionUUID->"73c86adf-32d1-415f-a85b-fd436acaab8d"],
+Cell[101843, 2959, 1130, 30, 66, "Print",ExpressionUUID->"dfc00bba-416f-4b01-aeea-7d13ceae3fb4"],
+Cell[102976, 2991, 1129, 30, 66, "Print",ExpressionUUID->"5aa3b6d6-2d05-4e70-b091-1145069fc567"],
+Cell[104108, 3023, 1129, 30, 66, "Print",ExpressionUUID->"10711602-57e8-4877-9bea-79b1ff7fbcda"],
+Cell[105240, 3055, 1129, 30, 66, "Print",ExpressionUUID->"6036844e-b736-4b4e-933b-ebc5b79cebfd"],
+Cell[106372, 3087, 1137, 31, 66, "Print",ExpressionUUID->"69a4f4d9-8ca1-491e-bcba-f531627c77de"],
+Cell[107512, 3120, 1128, 30, 66, "Print",ExpressionUUID->"43b80809-21cf-488b-af5a-80df8551dc9b"],
+Cell[108643, 3152, 1131, 30, 66, "Print",ExpressionUUID->"c1a0968f-750f-4e5f-a067-c4794ca9587e"],
+Cell[109777, 3184, 1131, 30, 66, "Print",ExpressionUUID->"a128263e-e46c-4bb4-be6c-4bf7d3ebaa91"],
+Cell[110911, 3216, 1139, 31, 66, "Print",ExpressionUUID->"16deae88-9b4b-49b5-b8dd-0679cd4f7204"],
+Cell[112053, 3249, 1068, 30, 66, "Print",ExpressionUUID->"be111476-8a5a-4edb-9632-163b5eb00a40"],
+Cell[113124, 3281, 1035, 30, 66, "Print",ExpressionUUID->"c31b696d-264d-49b7-8dd8-bccf2fcc2012"],
+Cell[114162, 3313, 1037, 30, 66, "Print",ExpressionUUID->"1eecb89e-c56a-437c-956f-0b2ca595c496"],
+Cell[115202, 3345, 1035, 30, 66, "Print",ExpressionUUID->"efaa32e0-c481-4b36-a58d-3194558902b8"],
+Cell[116240, 3377, 1037, 30, 66, "Print",ExpressionUUID->"fbed1f95-3473-4b3e-880b-8dc83fb3d96e"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[117338, 3414, 159, 3, 88, "Chapter",ExpressionUUID->"a12391f3-2e1d-44a1-9e2d-05ccc9aad2d1"],
+Cell[CellGroupData[{
+Cell[117522, 3421, 3067, 80, 388, "Input",ExpressionUUID->"30ff9781-3edd-4823-aba6-8783641c539f"],
+Cell[CellGroupData[{
+Cell[120614, 3505, 256, 5, 29, "Print",ExpressionUUID->"8da0e4a6-006c-4fbb-92c0-eb3973cdf5cf"],
+Cell[120873, 3512, 228, 4, 29, "Print",ExpressionUUID->"00630c30-810d-4144-b876-d3d444f75dce"],
+Cell[121104, 3518, 2232, 66, 66, "Print",ExpressionUUID->"ded951f9-6b67-4457-b697-9dd4c49c097d"]
+}, Open  ]],
+Cell[123351, 3587, 381, 10, 43, "Output",ExpressionUUID->"c25e5102-1f39-4b00-ac88-db8553d6a913"],
+Cell[CellGroupData[{
+Cell[123757, 3601, 256, 5, 29, "Print",ExpressionUUID->"53a9fd74-6046-4fdb-8f3c-565e5dc7c9e0"],
+Cell[124016, 3608, 995, 30, 66, "Print",ExpressionUUID->"e10e6f36-efa3-4abc-8c94-318bf4b8563d"],
+Cell[125014, 3640, 1013, 30, 66, "Print",ExpressionUUID->"f53a7900-e5cc-4883-9e2b-7a53305a5a22"],
+Cell[126030, 3672, 1033, 30, 66, "Print",ExpressionUUID->"721210c8-6746-4101-af60-343b6dc4da01"],
+Cell[127066, 3704, 1050, 30, 66, "Print",ExpressionUUID->"778d0194-61ac-443d-a821-dee447ddd226"],
+Cell[128119, 3736, 1069, 30, 66, "Print",ExpressionUUID->"c8a4bf9e-6756-47ae-bf73-f850e737b172"],
+Cell[129191, 3768, 1087, 31, 66, "Print",ExpressionUUID->"55b82511-6614-4a72-b98d-63511b819472"],
+Cell[130281, 3801, 1078, 30, 66, "Print",ExpressionUUID->"4525e6ab-ecd9-4449-ba45-d8d3794b087e"],
+Cell[131362, 3833, 1073, 30, 66, "Print",ExpressionUUID->"d7a01651-0fec-4240-abae-00b8109819e1"],
+Cell[132438, 3865, 1078, 30, 66, "Print",ExpressionUUID->"ad075ff3-cd14-499d-a6bb-18b84f1320ea"],
+Cell[133519, 3897, 1080, 30, 66, "Print",ExpressionUUID->"9b8fa1bd-06ab-4bb0-93ce-1a77d9c880d9"],
+Cell[134602, 3929, 1077, 30, 66, "Print",ExpressionUUID->"ad81320d-8fca-413b-acdb-db8e61dc938b"],
+Cell[135682, 3961, 1083, 30, 66, "Print",ExpressionUUID->"d5f317f6-65ac-45ab-9360-f65d7a522b8d"],
+Cell[136768, 3993, 1081, 30, 66, "Print",ExpressionUUID->"49030fae-92f0-46f8-8823-53b488749a9e"],
+Cell[137852, 4025, 1078, 30, 66, "Print",ExpressionUUID->"6e9b6f3e-f755-4128-954d-60f037190a50"],
+Cell[138933, 4057, 1074, 30, 66, "Print",ExpressionUUID->"c4d7f556-5a7e-4cb2-9fb9-78e9e3fde8cf"]
+}, Open  ]]
+}, Open  ]],
+Cell[140034, 4091, 199, 3, 37, "Input",ExpressionUUID->"f3c48b32-7ab3-48a4-8978-242377b5b5c2"],
+Cell[140236, 4096, 218, 3, 63, "Input",ExpressionUUID->"e7aa7e7e-7638-4bc6-98dd-44b7c220e101"],
+Cell[140457, 4101, 329, 4, 37, "Input",ExpressionUUID->"f6f655d0-da7f-4d87-93fb-c4f9ac9f469a"],
+Cell[140789, 4107, 401, 5, 37, "Input",ExpressionUUID->"bad67210-8932-4755-bd05-0b2a9f6c02f9"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
